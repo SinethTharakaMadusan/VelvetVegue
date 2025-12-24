@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Dashboard</title>
+    <link rel="stylesheet" href="Admin.css">
+    <link rel="stylesheet" href="product.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <div class="logo-container">
+                <img class="logo" src="image/logo.png" alt="Logo">
+
+            </div>
+            <div class="menu-items">
+                <a href="Admin.html" class="active"><i class="fas fa-home"></i> Dashboard</a>
+                <a href="products.html"><i class="fas fa-box"></i> Products</a>
+                <a href="orders.html"><i class="fas fa-shopping-cart"></i> Orders</a>
+                <a href="customers.html"><i class="fas fa-users"></i> Customers</a>
+                <a href="#"><i class="fas fa-chart-bar"></i> Analytics</a>
+                <a href="#"><i class="fas fa-cog"></i> Settings</a>
+            </div>
+            <div class="user-profile">
+                <img src="image/user.png" alt="User" class="user-avatar">
+                <div class="user-info">
+                    <h4>Admin User</h4>
+                    <p>Administrator</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="dashboard-header">
+                <h1>Dashboard</h1>
+            </div>
+            <div class="cards-container">
+                <div class="card">
+                    <i class="fas fa-dollar-sign"></i>
+                    <div class="card-info">
+                        <h2>Total Sales</h2>
+                        <p class="value">$24,500</p>
+                        <p class="change positive">+15% <span>vs last month</span></p>
+                    </div>
+                </div>
+                <div class="card">
+                    <i class="fas fa-shopping-bag"></i>
+                    <div class="card-info">
+                        <h2>Total Orders</h2>
+                        <p class="value">145</p>
+                        <p class="change positive">+8% <span>vs last month</span></p>
+                    </div>
+                </div>
+                <div class="card">
+                    <i class="fas fa-users"></i>
+                    <div class="card-info">
+                        <h2>Customers</h2>
+                        <p class="value">850</p>
+                        <p class="change positive">+12% <span>vs last month</span></p>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="recent-orders">
+                <div class="section-header">
+                    <h2>Recent Orders</h2>
+                    <div class="header-actions">
+                        <div class="search-container">
+                            <i class="fas fa-search search-icon"></i>
+                            <input type="text" placeholder="Search order number..." class="search-input">
+                        </div>
+                        <button class="view-all">View All Orders</button>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Customer</th>
+                                <th>Product</th>
+                                <th>Amount</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>#ORD-001</td>
+                                <td>John Smith</td>
+                                <td>Men's T-Shirt</td>
+                                <td>$29.99</td>
+                                <td>2025-09-14</td>
+                                <td><span class="status delivered">Delivered</span></td>
+                            </tr>
+                            <tr>
+                                <td>#ORD-002</td>
+                                <td>Emma Wilson</td>
+                                <td>Women's Dress</td>
+                                <td>$89.99</td>
+                                <td>2025-09-13</td>
+                                <td><span class="status pending">Pending</span></td>
+                            </tr>
+                            <tr>
+                                <td>#ORD-003</td>
+                                <td>Michael Brown</td>
+                                <td>Sport Shoes</td>
+                                <td>$129.99</td>
+                                <td>2025-09-13</td>
+                                <td><span class="status processing">Processing</span></td>
+                            </tr>
+                            <tr>
+                                <td>#ORD-004</td>
+                                <td>Sarah Davis</td>
+                                <td>Handbag</td>
+                                <td>$159.99</td>
+                                <td>2025-09-12</td>
+                                <td><span class="status delivered">Delivered</span></td>
+                            </tr>
+                            <tr>
+                                <td>#ORD-005</td>
+                                <td>James Johnson</td>
+                                <td>Watch</td>
+                                <td>$299.99</td>
+                                <td>2025-09-12</td>
+                                <td><span class="status cancelled">Cancelled</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    
+</body>
+
+</html>

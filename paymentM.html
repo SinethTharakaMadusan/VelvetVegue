@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Method</title>
+    <link rel="stylesheet" href="paymentM.css">
+    <link rel="stylesheet" href="home.css">
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://kit.fontawesome.com/416b43dbe0.js" crossorigin="anonymous"></script>
+     <link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+/>
+</head>
+<body>
+        <nav class="navbar">
+        <div class="navbar-container">
+            <a href="index.html" class="logo"><img src="image/logo.png" alt="logo"></a>
+            <button class="navbar-toggle">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </button>
+
+            <ul class="navbar-menu">
+                <li><a class="active" href="Home.html">Home</a></li>
+                <li><a href="#">Shop</a></li>
+                <li><a href="#">About Us</a></li>
+                <li><a href="#">Contact/Help</a></li>
+            </ul>
+
+
+            <!-- <button class="regbtn">Register/Login</button> -->
+            <div class="navbar-right">
+                <a href="#" class="regbtn">Register/Login</a>
+                <a href="cart.html"><i class="fas fa-shopping-cart"></i></a>
+                <i class="fas fa-user"></i>
+
+
+            </div>
+
+        </div>
+
+    </nav>
+
+
+    <div class="payment-method-selection">
+        <h2>Choose Payment Method</h2>
+
+        <input type="radio" id="cod" name="payment-method" value="cod" checked>
+        <label for="cod" class="payment-option">
+            <div class="option-details">
+                <span class="option-title">Cash on Delivery</span>
+                <span class="option-subtitle">Pay with upon delivery of the item.</span>
+
+            </div>
+            <i class="fa-regular fa-money-bill-1" id="cod"></i>
+            
+        </label>
+    
+
+    <input type="radio" id="card" name="payment-method" value="card">
+    <label for="card" class="payment-option">
+        <div class="option-details">
+            <span class="option-title">Credit/Debit Card</span>
+            <span class="option-subtitle">Visa, Mastercard, American Express, etc.</span>
+        </div>
+        <i class="fa-solid fa-credit-card" id="card"></i>
+    </label>
+</div>
+
+
+<!-- card adding -->
+
+<div class="card-details-form" id="cardform">
+    <div class="form-group">
+        <label for="cardnumber">Card Number</label>
+        <input type="text" id="cardnumber" placeholder="e.g 1234 5678 9012 3456" required>
+    </div>
+
+    <div class="form-group">
+        <label for="cardname">Cardholder Name</label>
+        <input type="text" id="cardname" placeholder="e.g John Doe" required>
+    </div>
+
+    <div class="form-group-split">
+        <div class="form-group expiry-group">
+            <label for="expirymonth">Expiry Date</label>
+            <div class="expiry-inputs">
+                <input type="text" id="expirymonth" placeholder="MM" maxlength="2" required>
+                <span>/</span>
+                <input type="text" id="expiryyear" placeholder="YY" maxlength="4" required>
+            </div>
+        </div>
+
+        <div class="form-group cvv-group">
+            <label for="cvv">CVV</label>
+            <input type="text" id="cvv" placeholder="e.g 123" maxlength="3" required>
+        </div>
+    </div>
+
+    
+</div>
+
+
+
+<!-- card adding end -->
+<button class="pay-btn">Pay Now</button>
+
+<script src="paymentM.js"></script>
+
+</body>
+</html>

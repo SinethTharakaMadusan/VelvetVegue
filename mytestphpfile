@@ -1,0 +1,201 @@
+    
+<?php
+require_once 'Database.php';
+
+// Simple debug logger (local development only)
+function log_debug($msg) {
+    $logFile = __DIR__ . DIRECTORY_SEPARATOR . 'add_product_debug.log';
+    $time = date('Y-m-d H:i:s');
+    $entry = "[{$time}] " . $msg . PHP_EOL;
+    @file_put_contents($logFile, $entry, FILE_APPEND | LOCK_EX);
+}
+
+// Log connection info for debugging
+if (!isset($conn) || !$conn) {
+    log_debug('DB connection missing or failed: ' . mysqli_connect_error());
+} else {
+    log_debug('DB connected. Client info: ' . mysqli_get_client_info());
+}
+
+// Only accept POST
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    http_response_code(405);
+    echo 'Method not allowed';
+    exit;
+}
+
+// Helper redirect back to products page with message
+function redirect($status = 'success', $message = '') {
+    // return to the admin products page (HTML) where the popup is located
+    $url = 'products.html';
+    $params = [];
+    if ($status) $params['status'] = $status;
+    if ($message) $params['msg'] = $message;
+    if (count($params)) $url .= '?' . http_build_query($params);
+    header('Location: ' . $url);
+    exit;
+}
+
+// Collect and sanitize inputs
+$name = isset($_POST['name']) ? trim($_POST['name']) : '';
+$category = isset($_POST['category']) ? trim($_POST['category']) : '';
+$gender = isset($_POST['gender']) ? trim($_POST['gender']) : '';
+$description = isset($_POST['description']) ? trim($_POST['description']) : '';
+$colors = isset($_POST['colors']) && is_array($_POST['colors']) ? $_POST['colors'] : [];
+$sizes = isset($_POST['sizes']) && is_array($_POST['sizes']) ? $_POST['sizes'] : [];
+
+// Log incoming request for debugging
+log_debug('Request method: ' . $_SERVER['REQUEST_METHOD']);
+log_debug('POST keys: ' . json_encode(array_keys($_POST)));
+// summarize files
+$fileSummary = [];
+if (isset($_FILES) && is_array($_FILES) && count($_FILES) > 0) {
+    foreach ($_FILES as $field => $info) {
+        $fileSummary[$field] = [];
+        if (is_array($info['name'])) {
+            foreach ($info['name'] as $i => $n) {
+                $fileSummary[$field][] = ['name'=>$n,'size'=>$info['size'][$i]];
+            }
+        } else {
+            $fileSummary[$field][] = ['name'=>$info['name'],'size'=>$info['size'] ?? 0];
+        }
+    }
+}
+log_debug('FILES summary: ' . json_encode($fileSummary));
+
+if ($name === '' || $category === '' || $description === '') {
+    redirect('error', 'Please fill required fields');
+}
+
+// Prepare uploads directory
+$uploadDir = __DIR__ . DIRECTORY_SEPARATOR . 'uploads';
+if (!is_dir($uploadDir)) {
+    if (!mkdir($uploadDir, 0755, true)) {
+        redirect('error', 'Failed to create uploads directory');
+    }
+}
+
+$allowedMime = ['image/jpeg', 'image/png', 'image/webp'];
+$maxSize = 5 * 1024 * 1024; // 5MB
+$storedFiles = [];
+
+if (isset($_FILES['images']) && is_array($_FILES['images']['tmp_name'])) {
+    foreach ($_FILES['images']['tmp_name'] as $idx => $tmpName) {
+        if (empty($tmpName)) continue;
+        if (!is_uploaded_file($tmpName)) continue;
+
+        $fileSize = $_FILES['images']['size'][$idx];
+        if ($fileSize > $maxSize) continue;
+
+        $mime = mime_content_type($tmpName);
+        if (!in_array($mime, $allowedMime)) continue;
+
+        $origName = basename($_FILES['images']['name'][$idx]);
+        $ext = pathinfo($origName, PATHINFO_EXTENSION);
+        $newName = uniqid('prod_', true) . '.' . $ext;
+        $dest = $uploadDir . DIRECTORY_SEPARATOR . $newName;
+
+        if (move_uploaded_file($tmpName, $dest)) {
+            // store relative path
+            $storedFiles[] = 'uploads/' . $newName;
+        }
+    }
+}
+
+// We'll store images in a separate table `product_images` (one row per image)
+mysqli_begin_transaction($conn);
+try {
+    $sql = "INSERT INTO products (name, category, gender, description, created_at) VALUES (?, ?, ?, ?, NOW())";
+    $stmt = mysqli_prepare($conn, $sql);
+    if (!$stmt) throw new Exception('Prepare failed: ' . mysqli_error($conn));
+
+    mysqli_stmt_bind_param($stmt, 'ssss', $name, $category, $gender, $description);
+    if (!mysqli_stmt_execute($stmt)) {
+        throw new Exception('Execute failed: ' . mysqli_stmt_error($stmt));
+    }
+
+    $product_id = mysqli_insert_id($conn);
+    mysqli_stmt_close($stmt);
+
+    // Insert colors (assume product_color table with columns product_id, color)
+    if (!empty($colors)) {
+        $colorStmt = mysqli_prepare($conn, "INSERT INTO product_colors (product_id, color) VALUES (?, ?)");
+        if (!$colorStmt) throw new Exception('Prepare color failed: ' . mysqli_error($conn));
+        foreach ($colors as $c) {
+            $cVal = trim($c);
+            mysqli_stmt_bind_param($colorStmt, 'is', $product_id, $cVal);
+            if (!mysqli_stmt_execute($colorStmt)) {
+                throw new Exception('Insert color failed: ' . mysqli_stmt_error($colorStmt));
+            }
+        }
+        mysqli_stmt_close($colorStmt);
+    }
+
+    // Insert sizes (assume products_size table with columns product_id, size)
+    if (!empty($sizes)) {
+        $sizeStmt = mysqli_prepare($conn, "INSERT INTO product_size (product_id, size) VALUES (?, ?)");
+        if (!$sizeStmt) throw new Exception('Prepare size failed: ' . mysqli_error($conn));
+        foreach ($sizes as $s) {
+            $sVal = trim($s);
+            mysqli_stmt_bind_param($sizeStmt, 'is', $product_id, $sVal);
+            if (!mysqli_stmt_execute($sizeStmt)) {
+                throw new Exception('Insert size failed: ' . mysqli_stmt_error($sizeStmt));
+            }
+        }
+        mysqli_stmt_close($sizeStmt);
+    }
+
+    // Insert uploaded images into product_images table (one row per file)
+    if (!empty($storedFiles)) {
+        $sqlImg = "INSERT INTO product_images (product_id, file_path, sort_order, created_at) VALUES (?, ?, ?, NOW())";
+        $imgStmt = mysqli_prepare($conn, $sqlImg);
+        if (!$imgStmt) {
+            throw new Exception('Prepare image failed: ' . mysqli_error($conn));
+        }
+
+        $bind_product_id = (int)$product_id;
+        $bind_file_path = '';
+        $bind_start_order = 0;
+        
+        if(!mysqli_stmt_bind_param($imgStmt, 'isi', $bind_product_id, $bind_file_path, $bind_start_order)) {
+            mysqli_stmt_close($imgStmt);
+            throw new Exception('Bind image failed: ' . mysqli_stmt_error($imgStmt));
+        }
+
+
+        foreach ($storedFiles as $pos => $filePath) {
+
+            $bind_file_path = (string)$filePath;
+            $bind_start_order = (int)$pos;
+
+            // $posIndex = (int)$pos;
+            // mysqli_stmt_bind_param($imgStmt, 'isi', $product_id, $filePath, $posIndex);
+            if (!mysqli_stmt_execute($imgStmt)) {
+                $err = mysqli_stmt_error($imgStmt);
+                mysqli_stmt_close($imgStmt);
+                throw new Exception('Insert image failed: ' . $err);
+            }
+        }
+        mysqli_stmt_close($imgStmt);
+    }
+
+    mysqli_commit($conn);
+    // log success with inserted id and stored files
+    log_debug('COMMIT success. product_id=' . $product_id . ' storedFiles=' . json_encode($storedFiles));
+    redirect('success', 'Product saved');
+
+} catch (Exception $e) {
+    mysqli_rollback($conn);
+    // Optionally remove uploaded files on failure
+    foreach ($storedFiles as $f) {
+        $path = __DIR__ . DIRECTORY_SEPARATOR . $f;
+        if (file_exists($path)) @unlink($path);
+    }
+    // Log exception details for debugging
+    log_debug('EXCEPTION: ' . $e->getMessage());
+    // Also include last mysqli error
+    log_debug('MySQL error (connection): ' . mysqli_error($conn));
+    redirect('error', $e->getMessage());
+}
+
+?>

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Customers</title>
+    <link rel="stylesheet" href="Admin.css">
+    <link rel="stylesheet" href="customers.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <div class="logo-container">
+                <img class="logo" src="image/logo.png" alt="Logo">
+            </div>
+            <div class="menu-items">
+                <a href="Admin.html"><i class="fas fa-home"></i> Dashboard</a>
+                <a href="products.html"><i class="fas fa-box"></i> Products</a>
+                <a href="orders.html"><i class="fas fa-shopping-cart"></i> Orders</a>
+                <a href="customers.html" class="active"><i class="fas fa-users"></i> Customers</a>
+                <a href="#"><i class="fas fa-chart-bar"></i> Analytics</a>
+                <a href="#"><i class="fas fa-cog"></i> Settings</a>
+            </div>
+            <div class="user-profile">
+                <img src="image/user.png" alt="User" class="user-avatar">
+                <div class="user-info">
+                    <h4>Admin User</h4>
+                    <p>Administrator</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="dashboard-header">
+                <h1>Customer Management</h1>
+                <div class="header-actions">
+                    
+                </div>
+            </div>
+
+            
+            <div class="customer-filters">
+                <div class="search-container">
+                    <!-- <i class="fas fa-search search-icon"></i> -->
+                    <button onclick="searchFunction()"><i class="fas fa-search search-icon"></i></button>
+                    <input type="text" placeholder="Search customers..." class="search-input">
+                </div>
+                <div class="filter-group">
+                    <select class="filter-select">
+                        <option value="">Membership Status</option>
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
+                    </select>
+                    <select class="filter-select">
+                        <option value="">Sort By</option>
+                        <option value="name">Name</option>
+                        <option value="orders">Orders</option>
+                        <option value="spent">Total Spent</option>
+                        <option value="joined">Join Date</option>
+                    </select>
+                    <button class="filter-btn">
+                        <i class="fas fa-filter"></i> Filter
+                    </button>
+                </div>
+            </div>
+
+            <div class="customers-grid">
+                <div class="customer-card">
+                    <div class="customer-header">
+                        <img src="image/user.png" alt="Customer" class="customer-avatar">
+                        <div class="status-badge active">Active</div>
+                    </div>
+                    <div class="customer-info">
+                        <h3>John Smith</h3>
+                        <p class="email">john.smith@email.com</p>
+                        <div class="customer-stats">
+                            <div class="stat">
+                                <span class="label">Orders</span>
+                                <span class="value">12</span>
+                            </div>
+                            <div class="stat">
+                                <span class="label">Spent</span>
+                                <span class="value">$1,245</span>
+                            </div>
+                        </div>
+                        <p class="joined-date">Joined: Sept 1, 2025</p>
+                    </div>
+                    <div class="customer-actions">
+                        <button class="view-btn"><i class="fas fa-eye"></i> View Profile</button>
+                        <button class="edit-btn"><i class="fas fa-edit"></i></button>
+                        <button class="delete-btn"><i class="fas fa-trash"></i></button>
+                    </div>
+                </div>
+
+                <div class="customer-card">
+                    <div class="customer-header">
+                        <img src="image/user.png" alt="Customer" class="customer-avatar">
+                        <div class="status-badge active">Active</div>
+                    </div>
+                    <div class="customer-info">
+                        <h3>Emma Wilson</h3>
+                        <p class="email">emma.w@email.com</p>
+                        <div class="customer-stats">
+                            <div class="stat">
+                                <span class="label">Orders</span>
+                                <span class="value">8</span>
+                            </div>
+                            <div class="stat">
+                                <span class="label">Spent</span>
+                                <span class="value">$890</span>
+                            </div>
+                        </div>
+                        <p class="joined-date">Joined: Aug 15, 2025</p>
+                    </div>
+                    <div class="customer-actions">
+                        <button class="view-btn"><i class="fas fa-eye"></i> View Profile</button>
+                        <button class="edit-btn"><i class="fas fa-edit"></i></button>
+                        <button class="delete-btn"><i class="fas fa-trash"></i></button>
+                    </div>
+                </div>
+
+                <div class="customer-card">
+                    <div class="customer-header">
+                        <img src="image/user.png" alt="Customer" class="customer-avatar">
+                        <div class="status-badge inactive">Inactive</div>
+                    </div>
+                    <div class="customer-info">
+                        <h3>Michael Brown</h3>
+                        <p class="email">michael.b@email.com</p>
+                        <div class="customer-stats">
+                            <div class="stat">
+                                <span class="label">Orders</span>
+                                <span class="value">3</span>
+                            </div>
+                            <div class="stat">
+                                <span class="label">Spent</span>
+                                <span class="value">$245</span>
+                            </div>
+                        </div>
+                        <p class="joined-date">Joined: July 20, 2025</p>
+                    </div>
+                    <div class="customer-actions">
+                        <button class="view-btn"><i class="fas fa-eye"></i> View Profile</button>
+                        <button class="edit-btn"><i class="fas fa-edit"></i></button>
+                        <button class="delete-btn"><i class="fas fa-trash"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customers</title>
+    <link rel="stylesheet" href="customers.css">
+</head>
+<body>
+    <header>
+        <h1>Customers</h1>
+    </header>
+    <main>
+        <table>
+            <thead>
+                <tr>
+                    <th>Customer ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                </tr>
+            </thead>
+            <tbody id="customers-table-body">
+                <!-- Customer data will be inserted here -->
+            </tbody>
+        </table>
+    </main>
+    <script src="customers.js"></script>
+</body>
+</html>

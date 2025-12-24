@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+ <html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Orders</title>
+    <link rel="stylesheet" href="Admin.css">
+    <link rel="stylesheet" href="orders.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <div class="logo-container">
+                <img class="logo" src="image/logo.png" alt="Logo">
+            </div>
+            <div class="menu-items">
+                <a href="Admin.html"><i class="fas fa-home"></i> Dashboard</a>
+                <a href="products.html"><i class="fas fa-box"></i> Products</a>
+                <a href="orders.html" class="active"><i class="fas fa-shopping-cart"></i> Orders</a>
+                <a href="customers.html"><i class="fas fa-users"></i> Customers</a>
+                <a href="#"><i class="fas fa-chart-bar"></i> Analytics</a>
+                <a href="#"><i class="fas fa-cog"></i> Settings</a>
+            </div>
+            <div class="user-profile">
+                <img src="image/user.png" alt="User" class="user-avatar">
+                <div class="user-info">
+                    <h4>Admin User</h4>
+                    <p>Administrator</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="dashboard-header">
+                <h1>Orders Management</h1>
+                <div class="header-actions">
+                    
+                </div>
+            </div>
+
+            <div class="orders-filters">
+                <div class="search-container">
+                   
+                     <button onclick="searchFunction()"><i class="fas fa-search search-icon"></i></button>
+                    <input type="text" placeholder="Search order ID or customer..." class="search-input">
+                </div>
+                <div class="filter-group">
+                    <select class="filter-select">
+                        <option value="">All Status</option>
+                        <option value="pending">Pending</option>
+                        <option value="processing">Processing</option>
+                        <option value="delivered">Delivered</option>
+                        <option value="cancelled">Cancelled</option>
+                    </select>
+                    <select class="filter-select">
+                        <option value="">Date Range</option>
+                        <option value="today">Today</option>
+                        <option value="week">This Week</option>
+                        <option value="month">This Month</option>
+                        <option value="year">This Year</option>
+                    </select>
+                    <button class="filter-btn">
+                        <i class="fas fa-filter"></i> Filter
+                    </button>
+                </div>
+            </div>
+
+            <div class="orders-list">
+                <div class="order-card">
+                    <div class="order-header">
+                        <div class="order-id">#ORD-001</div>
+                        <span class="status delivered">Delivered</span>
+                    </div>
+                    <div class="order-details">
+                        <div class="customer-info">
+                            <i class="fas fa-user"></i>
+                            <div>
+                                <h3>John Smith</h3>
+                                <p>john.smith@email.com</p>
+                            </div>
+                        </div>
+                        <div class="order-info">
+                            <div class="info-item">
+                                <span class="label">Date:</span>
+                                <span class="value">Sept 14, 2025</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="label">Items:</span>
+                                <span class="value">2</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="label">Total:</span>
+                                <span class="value">$129.98</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="order-actions">
+                        <button class="view-btn"><i class="fas fa-eye"></i> View Details</button>
+                        <button class="update-btn"><i class="fas fa-edit"></i> Update Status</button>
+                    </div>
+                </div>
+
+                <div class="order-card">
+                    <div class="order-header">
+                        <div class="order-id">#ORD-002</div>
+                        <span class="status processing">Processing</span>
+                    </div>
+                    <div class="order-details">
+                        <div class="customer-info">
+                            <i class="fas fa-user"></i>
+                            <div>
+                                <h3>Emma Wilson</h3>
+                                <p>emma.w@email.com</p>
+                            </div>
+                        </div>
+                        <div class="order-info">
+                            <div class="info-item">
+                                <span class="label">Date:</span>
+                                <span class="value">Sept 13, 2025</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="label">Items:</span>
+                                <span class="value">3</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="label">Total:</span>
+                                <span class="value">$249.97</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="order-actions">
+                        <button class="view-btn"><i class="fas fa-eye"></i> View Details</button>
+                        <button class="update-btn"><i class="fas fa-edit"></i> Update Status</button>
+                    </div>
+                </div>
+
+                <div class="order-card">
+                    <div class="order-header">
+                        <div class="order-id">#ORD-003</div>
+                        <span class="status pending">Pending</span>
+                    </div>
+                    <div class="order-details">
+                        <div class="customer-info">
+                            <i class="fas fa-user"></i>
+                            <div>
+                                <h3>Michael Brown</h3>
+                                <p>michael.b@email.com</p>
+                            </div>
+                        </div>
+                        <div class="order-info">
+                            <div class="info-item">
+                                <span class="label">Date:</span>
+                                <span class="value">Sept 13, 2025</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="label">Items:</span>
+                                <span class="value">1</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="label">Total:</span>
+                                <span class="value">$89.99</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="order-actions">
+                        <button class="view-btn"><i class="fas fa-eye"></i> View Details</button>
+                        <button class="update-btn"><i class="fas fa-edit"></i> Update Status</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,245 @@
+.billing-container {
+    width: 100%;
+    border: none;
+    margin-bottom: 30px;
+}
+
+.billing-header {
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #e6e6e6;
+    padding: 1px 15px;
+    color: #333;
+}
+
+.header-title {
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
+.edit-button {
+    background-color: #244551;
+    color: #fff;
+    border: none;
+    padding: 10px 18px;
+    font-size: 0.9em;
+    cursor: pointer;
+    font-weight: 500;
+    margin-left: 32rem;
+}
+
+.billing-content {
+    background-color: #f6f6f6;
+    padding: 15px;
+}
+
+.billing-content p {
+    margin: 5px 0;
+    color: #333;
+}
+
+.package-container {
+    width: 100%;
+    font-family: 'Poppins', sans-serif;
+    margin-bottom: 30px;
+}
+
+.package-header {
+    background-color: #e6e6e6;
+    padding: 10px 15px;
+    font-weight: bold;
+    color: #555;
+    font-size: 0.9em;
+
+}
+
+.delivery-section {
+    padding: 15px;
+    background-color: #f6f6f6;
+
+}
+
+.delivery-title {
+    color: #333;
+    font-weight: bold;
+    font-size: 1.1em;
+    margin-left: 0;
+    text-align: left;
+}
+
+.header-title {
+    font-weight: bold;
+    font-size: 1.1em;
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+.delivery-box {
+    padding: 15px;
+    width: 20rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    line-height: 1.4;
+    border: 2px solid #5cb85c;
+}
+
+
+.delivery-box p {
+    margin: 0;
+}
+
+.shipping-cost {
+    font-weight: bold;
+    color: #333;
+}
+
+.delivery-date {
+    font-weight: bold;
+    font-size: 1.2em;
+    color: #333;
+}
+
+.product-summery {
+    display: flex;
+    align-items: flex-start;
+    padding: 15px;
+    border-bottom: 2px solid #d8d7d7;
+
+}
+
+.product-image {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    margin-right: 15px;
+}
+
+.product-details {
+    flex-grow: 1;
+    margin-right: 15px;
+    font-size: 0.9em;
+}
+
+.product-name {
+    margin: 0 0 5px 0;
+    line-height: 1.3;
+}
+
+.product-sku {
+    margin: 0;
+    color: #777;
+}
+
+.price-details {
+    text-align: right;
+    white-space: nowrap;
+}
+
+.original-price {
+    font-weight: bold;
+    font-size: 1.1em;
+    margin: 0;
+}
+
+.quantity {
+    margin: 5px 0 0 0;
+    font-size: 0.9em;
+    color: #555;
+}
+
+.order-summary {
+    width: 350px;
+    flex-shrink: 0;
+    border: 1px solid #eee;
+    border-radius: 15px;
+    padding: 20px;
+    font-family: 'Poppins', sans-serif;
+    background-color: #f4f4f4;
+    align-self: flex-start;
+}
+
+.summary-title {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-top: 0;
+    margin-bottom: 20px;
+    margin-left: 4.5rem;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.summary-row .label {
+    color: #555;
+}
+
+.summery-row .value {
+    font-weight: bold;
+}
+
+.summary-separator {
+    border: 0;
+    border-top: 1px solid #ccc;
+    margin: 20px 0;
+}
+
+.totle-row {
+    margin-bottom: 25px;
+}
+
+.totle-row .totle-label {
+    font-weight: bold;
+    color: #333;
+}
+
+.totle-row .totle-value {
+    font-weight: bold;
+    font-size: 1.2em;
+}
+
+.proceed-button {
+    width: 100%;
+    background-color: #e60000;
+    color: #fff;
+    font-weight: bold;
+    font-size: 1.1em;
+    padding: 7px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-transform: uppercase;
+}
+
+.proceed-button:hover {
+    background-color: #d60000;
+}
+
+
+.payment-layout {
+    display: flex;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 20px;
+    gap: 30px;
+}
+
+.payment-left {
+    flex: 1;
+}
+
+@media (max-width: 900px) {
+    .payment-layout {
+        flex-direction: column;
+    }
+
+    .order-summary {
+        width: 100%;
+        margin-top: 20px;
+    }
+}
