@@ -133,7 +133,7 @@ if (!$result) {
   
 
 <!-- categories -->
-<h2>#Categories</h2>
+<h2>#New Collection</h2>
 <div class="wrapper">
   <div class="parent">
     <div class="child bg1"></div>
@@ -160,7 +160,7 @@ if (!$result) {
 </div>
 
 <!-- cards -->
-  <h2>#Our Best Collections</h2>
+
 <div class="card-container">
   <?php if ($result->num_rows > 0): ?>
     <?php while($row = $result->fetch_assoc()): 
