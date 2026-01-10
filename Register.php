@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register Form</title>
+    <link rel="icon" type="image/png" href="image/logo.png">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel ="stylesheet" href ="Register.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css">
@@ -69,15 +70,8 @@
             mysqli_stmt_bind_param($stmt, "sss", $name, $email, $passwordHash);
             mysqli_stmt_execute($stmt);
             
-            // Auto Login Logic
-            session_start();
-            $newUserId = mysqli_insert_id($conn);
-            $_SESSION["user_id"] = $newUserId;
-            $_SESSION["user_name"] = $name;
-            $_SESSION["is_admin"] = 0; // Default to normal user
-
-            // Redirect to logged-in home
-            header("Location: logHome.php");
+            // Redirect to login page
+            header("Location: Log.php");
             exit();
             
         }else{
@@ -120,7 +114,7 @@
                 <input type="password" class="form-control" name="confirmpassword" placeholder="Confirm Password">
             </div>
              <div class="form-group">
-                <input type="submit" class="btn btn-primary" value="Register" name="submit">
+                <input href="log.php" type="submit" class="btn btn-primary" value="Register" name="submit">
             </div>
 
 
@@ -131,7 +125,7 @@
 
     <div class="login-link">
         <span>Already have an Account?</span>
-        <a href="login.php">Log now</a>
+        <a href="log.php">Log now</a>
     </div>
         </form>
     </div>

@@ -1,3 +1,58 @@
+// Hierarchical Category Data
+const categoryData = {
+    "Menswear": ["Shirts", "T-shirts", "Trousers", "Hoodies"],
+    "Womenswear": [
+        "Dresses - Mini",
+        "Dresses - Maxi",
+        "Dresses - T-shirt",
+        "Tops - Blouses",
+        "Tops - Crop",
+        "Bottoms - Leggings",
+        "Bottoms - Skirts"
+    ],
+    "Shoes": ["Sneakers", "Formal", "Sandals/Heels", "Sports"]
+};
+
+// Update subcategories based on selected main category
+function updateSubcategories() {
+    const mainCategory = document.getElementById('mainCategory').value;
+    const subcategorySelect = document.getElementById('subcategory');
+
+    // Clear existing options
+    subcategorySelect.innerHTML = '<option value="">--Choose Subcategory--</option>';
+
+    // Populate based on selection
+    if (mainCategory && categoryData[mainCategory]) {
+        categoryData[mainCategory].forEach(sub => {
+            const option = document.createElement('option');
+            option.value = sub;
+            option.textContent = sub;
+            subcategorySelect.appendChild(option);
+        });
+    }
+
+    // Toggle size displays
+    toggleSizeInputs(mainCategory);
+}
+
+// Toggle between clothing sizes and shoe sizes
+function toggleSizeInputs(mainCategory) {
+    const clothingSizes = document.getElementById('clothingSizes');
+    const shoeSizes = document.getElementById('shoeSizes');
+
+    if (mainCategory === 'Shoes') {
+        clothingSizes.style.display = 'none';
+        shoeSizes.style.display = 'flex';
+        // Uncheck all clothing sizes
+        clothingSizes.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+    } else {
+        clothingSizes.style.display = 'flex';
+        shoeSizes.style.display = 'none';
+        // Uncheck all shoe sizes
+        shoeSizes.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+    }
+}
+
 // products.js - popup, previews, validation and detail modal handlers
 
 function openPopup() {
@@ -28,14 +83,20 @@ function resetForm() {
     uploadIcons.forEach(el => el.style.display = 'block');
 
     // Reset selects and textarea
-    const categoryEl = document.getElementById('category');
-    if (categoryEl) categoryEl.value = '';
+    const mainCategoryEl = document.getElementById('mainCategory');
+    if (mainCategoryEl) mainCategoryEl.value = '';
+    const subcategoryEl = document.getElementById('subcategory');
+    if (subcategoryEl) subcategoryEl.value = '';
     const descEl = document.querySelector('textarea[name="description"]');
     if (descEl) descEl.value = '';
 
     // Reset checkboxes
     const checkboxes = document.querySelectorAll('input[type="checkbox"]');
     checkboxes.forEach(cb => cb.checked = false);
+
+    // Reset size displays
+    document.getElementById('clothingSizes').style.display = 'flex';
+    document.getElementById('shoeSizes').style.display = 'none';
 }
 
 function closePopup() {
@@ -175,7 +236,7 @@ function searchFunction() {
         const title = cards[i].querySelector('.product-info h3');
         const idText = cards[i].innerText;
 
-        
+
         let txtValue = title.textContent || title.innerText;
         let allText = cards[i].textContent || cards[i].innerText;
 

@@ -1,25 +1,46 @@
 
 <?php
+session_start();
 require_once 'Database.php';
 
-// Check if delete request
-if (isset($_GET['delete_id'])) {
-    $del_id = (int)$_GET['delete_id'];
-    // Optional: Add deletion logic here or redirect to a delete script
-    // For now, we'll just redirect to avoid re-submission issues if logic were here
-    // header("Location: products.php"); 
+// Get user info if logged in
+$firstName = "User";
+$cartCount = 0;
+
+if (isset($_SESSION['user_id'])) {
+    $user_id = $_SESSION['user_id'];
+    
+    // Get user name
+    if (isset($_SESSION['user_name'])) {
+        $parts = explode(' ', $_SESSION['user_name']);
+        $firstName = $parts[0];
+    }
+    
+    // Get cart count
+    $cart_sql = "SELECT COUNT(*) as count FROM cart WHERE users_id = ?";
+    $cart_stmt = $conn->prepare($cart_sql);
+    $cart_stmt->bind_param("i", $user_id);
+    $cart_stmt->execute();
+    $cart_result = $cart_stmt->get_result();
+    if ($cart_row = $cart_result->fetch_assoc()) {
+        $cartCount = $cart_row['count'];
+    }
+    $cart_stmt->close();
 }
 
-// Check if product_id is set
+if (isset($_GET['delete_id'])) {
+    $del_id = (int)$_GET['delete_id'];
+}
+
 if (isset($_GET['id'])) {
     $product_id = (int)$_GET['id'];
 
-    // Fetch product details
     $sql = "
     SELECT
       p.product_id,
       p.name,
-      p.category,
+      p.main_category,
+      p.subcategory,
       p.gender,
       IFNULL(p.price, 0.00) AS price,
       IFNULL(p.stock, 0) AS stock, 
@@ -38,7 +59,6 @@ if (isset($_GET['id'])) {
     if ($result && $result->num_rows > 0) {
         $product = $result->fetch_assoc();
         
-        // Fetch images for this product
         $img_sql = "SELECT file_path FROM product_images WHERE product_id = $product_id ORDER BY sort_order ASC";
         $img_result = $conn->query($img_sql);
         $images = [];
@@ -47,14 +67,43 @@ if (isset($_GET['id'])) {
                 $images[] = $row['file_path'];
             }
         }
-        // Ensure at least one image exists to avoid errors
         if (empty($images)) {
-            $images[] = 'image/default.png'; // Fallback image
+            $images[] = 'image/default.png'; 
         }
 
-        // Parse colors and sizes
         $colors = !empty($product['colors']) ? explode(',', $product['colors']) : [];
         $sizes = !empty($product['sizes']) ? explode(',', $product['sizes']) : [];
+
+        // Fetch reviews
+        $reviews_sql = "
+        SELECT 
+            r.review_id,
+            r.rating,
+            r.review_text,
+            r.review_image,
+            r.created_at,
+            u.name as user_name
+            -- u.profile_image 
+        FROM product_reviews r
+        JOIN users u ON r.user_id = u.users_id
+        WHERE r.product_id = $product_id
+        ORDER BY r.created_at DESC
+        ";
+        
+        $reviews_result = $conn->query($reviews_sql);
+        $reviews = [];
+        $total_rating = 0;
+        $review_count = 0;
+        
+        if ($reviews_result) {
+            while ($row = $reviews_result->fetch_assoc()) {
+                $reviews[] = $row;
+                $total_rating += $row['rating'];
+                $review_count++;
+            }
+        }
+        
+        $avg_rating = $review_count > 0 ? round($total_rating / $review_count, 1) : 0;
 
     } else {
         die('Product not found.');
@@ -76,17 +125,20 @@ $sql = "
 SELECT
   p.product_id,
   p.name,
-  p.category,
+  p.main_category,
+  p.subcategory,
   p.gender,
   IFNULL(p.price, 0.00) AS price,
   IFNULL(p.stock, 0) AS stock, 
   p.description,
   (SELECT file_path FROM product_images WHERE product_id = p.product_id ORDER BY sort_order ASC LIMIT 1) AS image_path,
   GROUP_CONCAT(DISTINCT pc.color SEPARATOR ', ') AS colors,
-  GROUP_CONCAT(DISTINCT ps.size  SEPARATOR ', ') AS sizes
+  GROUP_CONCAT(DISTINCT ps.size  SEPARATOR ', ') AS sizes,
+  COALESCE(AVG(r.rating), 0) as avg_rating
 FROM products p
 LEFT JOIN product_color pc ON pc.product_id = p.product_id
 LEFT JOIN product_size ps ON ps.product_id = p.product_id
+LEFT JOIN product_reviews r ON r.product_id = p.product_id
 WHERE p.gender = '$genderFilter' AND p.product_id != $currentId
 GROUP BY p.product_id
 ORDER BY p.product_id DESC LIMIT 4
@@ -106,7 +158,8 @@ if (!$result) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo htmlspecialchars($product['name']); ?> - Product View</title>
     <link rel="stylesheet" href="home.css">
-    <link rel="stylesheet" href="logviewproduct.css">
+    <link rel="stylesheet" href="loghome.css">
+    <link rel="stylesheet" href="logviewproduct.css?v=<?php echo time(); ?>">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
@@ -123,14 +176,40 @@ if (!$result) {
                 <span class="bar"></span>
                 <span class="bar"></span>
             </button>
+            <!-- ... -->
+
 
             <ul class="navbar-menu">
-                <li><a class="active" href="Home.html">Home</a></li>
-                <li><a href="#">Shop</a></li>
-                <li><a href="#">About Us</a></li>
+                <li><a href="logHome.php">Home</a></li>
+                <li><a href="allproducts.php">Shop</a></li>
+                <li><a href="about.php">About Us</a></li>
                 <li><a href="#">Contact/Help</a></li>
             </ul>
 
+            <div class="icon-bar">
+                <div class="user-name">
+                    <h3>Welcome,</h3>
+                    <p><?php echo htmlspecialchars($firstName); ?></p>
+                </div>
+
+                <a href="cart.php" class="icon-box">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="count"><?php echo $cartCount; ?></span>
+                </a>
+
+                <div class="user-menu-container">
+                    <a href="javascript:void(0)" class="icon-box user" id="userBtn">
+                        <i class="fas fa-user"></i>
+                    </a>
+                    <div class="user-dropdown" id="userMenu">
+                        <a href="myorder.php"><i class="fas fa-box"></i> My Orders</a>
+                        <a href="#"><i class="fas fa-heart"></i> Wishlist</a>
+                        <a href="Account.php"><i class="fas fa-user-cog"></i> Profile</a>
+                        <hr>
+                        <a class="logout" href="Home.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                    </div>
+                </div>
+            </div>
         </div>
     </nav>
 
@@ -156,7 +235,7 @@ if (!$result) {
             </div>
 
             <div class="col-2">
-                <p>Home / <?php echo htmlspecialchars($product['category']); ?></p>
+                <p>Home / <?php echo htmlspecialchars($product['main_category'] ?? ''); ?> / <?php echo htmlspecialchars($product['subcategory'] ?? ''); ?></p>
                 <h1><?php echo htmlspecialchars($product['name']); ?></h1>
                 <h4>Rs. <?php echo number_format($product['price'], 2); ?></h4>
 
@@ -197,12 +276,29 @@ if (!$result) {
                     <button type="button" class="qty-btn plus-btn">+</button>
                 </div>
                 
-                <a href="#" class="btn">Add To Cart</a>
+                <!-- Add to Cart Form -->
+                <form action="add_to_cart.php" method="POST" id="addToCartForm">
+                    <input type="hidden" name="product_id" value="<?php echo $product['product_id']; ?>">
+                    <input type="hidden" name="qty" id="cartQty" value="1">
+                    <input type="hidden" name="selected_color" id="cartColor" value="">
+                    <input type="hidden" name="selected_size" id="cartSize" value="">
+                </form>
 
-                  <div class="btn-container">
-                        <a href="" class="buy-btn">Buy Now</a>
-                        <a href="cart.php" class="cart-btn">Add to Cart</a>
-                    </div>
+                  <form action="payment.php" method="POST" id="buyNowForm">
+                      <input type="hidden" name="buy_now" value="1">
+                      <input type="hidden" name="product_id" value="<?php echo $product['product_id']; ?>">
+                      <input type="hidden" name="product_name" value="<?php echo htmlspecialchars($product['name']); ?>">
+                      <input type="hidden" name="product_price" value="<?php echo $product['price']; ?>">
+                      <input type="hidden" name="product_image" value="<?php echo htmlspecialchars($images[0]); ?>">
+                      <input type="hidden" name="quantity" id="buyNowQty" value="1">
+                      <input type="hidden" name="selected_color" id="buyNowColor" value="">
+                      <input type="hidden" name="selected_size" id="buyNowSize" value="">
+                      
+                      <div class="btn-container">
+                          <button type="button" class="buy-btn" onclick="validateAndBuyNow()">Buy Now</button>
+                          <button type="button" class="cart-btn" onclick="validateAndAddToCart()">Add to Cart</button>
+                      </div>
+                  </form>
             </div>
         </div>
     </div>
@@ -221,8 +317,34 @@ if (!$result) {
             </div>
 
             <div id="review" class="tab-content">
-                <h2>Customer Reviews (5)</h2>
-                <p>Great quality and fast shipping!</p>
+                <h2>Customer Reviews (<?php echo $review_count; ?>)</h2>
+                <?php if ($review_count > 0): ?>
+                    <div class="reviews-list">
+                        <?php foreach ($reviews as $review): ?>
+                        <div class="review-item">
+                            <div class="review-header">
+                                <div class="reviewer-info">
+                                    <span class="reviewer-name"><?php echo htmlspecialchars($review['user_name']); ?></span>
+                                    <span class="review-date"><?php echo date('M d, Y', strtotime($review['created_at'])); ?></span>
+                                </div>
+                                <div class="review-rating">
+                                    <?php for ($i = 1; $i <= 5; $i++): ?>
+                                        <i class="fas fa-star <?php echo $i <= $review['rating'] ? 'filled' : ''; ?>"></i>
+                                    <?php endfor; ?>
+                                </div>
+                            </div>
+                            <p class="review-text"><?php echo nl2br(htmlspecialchars($review['review_text'])); ?></p>
+                            <?php if (!empty($review['review_image'])): ?>
+                            <div class="review-image">
+                                <img src="<?php echo htmlspecialchars($review['review_image']); ?>" alt="Review Image" class="review-img-thumb" onclick="window.open(this.src, '_blank')">
+                            </div>
+                            <?php endif; ?>
+                        </div>
+                        <?php endforeach; ?>
+                    </div>
+                <?php else: ?>
+                    <p class="no-reviews">No reviews yet. Be the first to review this product!</p>
+                <?php endif; ?>
             </div>
         </div>
       </div>
@@ -249,8 +371,12 @@ if (!$result) {
       $name = htmlspecialchars($nameVal);
       $price = number_format((float)$row['price'], 2);
       $img = !empty($row['image_path']) ? htmlspecialchars($row['image_path']) : 'image/no-image.png';
+      $rating = round($row['avg_rating']); 
     ?>
-    <div class="card" data-category="<?php echo htmlspecialchars($row['category']); ?>" data-gender="<?php echo htmlspecialchars($row['gender']); ?>">
+    <div class="card" 
+         data-main-category="<?php echo htmlspecialchars($row['main_category'] ?? ''); ?>" 
+         data-subcategory="<?php echo htmlspecialchars($row['subcategory'] ?? ''); ?>" 
+         data-gender="<?php echo htmlspecialchars($row['gender']); ?>">
       <a href="logviewproduct.php?id=<?php echo $row['product_id']; ?>">
         <img src="<?php echo $img; ?>" alt="<?php echo $name; ?>">
       </a>
@@ -260,24 +386,123 @@ if (!$result) {
           <h3>Rs. <?php echo $price; ?></h3>
         </a>
         <div class="stars">
-          <i class="fas fa-star"></i>
-          <i class="fas fa-star"></i>
-          <i class="fas fa-star"></i>
-          <i class="fas fa-star"></i>
-          <i class="fas fa-star"></i>
+          <?php for($i = 1; $i <= 5; $i++): ?>
+            <?php if ($i <= $rating): ?>
+                <i class="fas fa-star" style="color: #ffc107;"></i>
+            <?php else: ?>
+                <i class="far fa-star" style="color: #ccc;"></i>
+            <?php endif; ?>
+          <?php endfor; ?>
+          <span style="font-size: 12px; color: #777;">(<?php echo number_format($row['avg_rating'], 1); ?>)</span>
         </div>
-        <div class="card-buttons">
-          <a href="#" class="cart">Add to Cart</a>
         </div>
       </div>
-    </div>
     <?php endwhile; ?>
   <?php else: ?>
     <p style="text-align:center; width:100%;">No products found.</p>
   <?php endif; ?>
 </div>
       
-    <script src="logviewproducts.js?v=<?php echo time(); ?>"></script>
+    <script src="logviewproduct.js?v=<?php echo time(); ?>"></script>
+    <script>
+        // Check if colors and sizes exist
+        const hasColors = <?php echo !empty($colors) ? 'true' : 'false'; ?>;
+        const hasSizes = <?php echo !empty($sizes) ? 'true' : 'false'; ?>;
+        
+        // Validation function for both buttons
+        function validateSelection() {
+            let isValid = true;
+            let message = '';
+            
+            // Check color selection if colors exist
+            if (hasColors) {
+                const selectedColor = document.getElementById('buyNowColor').value || document.getElementById('cartColor').value;
+                if (!selectedColor) {
+                    message += 'Please select a color.\n';
+                    isValid = false;
+                }
+            }
+            
+            // Check size selection if sizes exist
+            if (hasSizes) {
+                const selectedSize = document.getElementById('buyNowSize').value || document.getElementById('cartSize').value;
+                if (!selectedSize) {
+                    message += 'Please select a size.';
+                    isValid = false;
+                }
+            }
+            
+            if (!isValid) {
+                alert(message);
+            }
+            
+            return isValid;
+        }
+        
+        // Validate and Buy Now
+        function validateAndBuyNow() {
+            if (validateSelection()) {
+                document.getElementById('buyNowForm').submit();
+            }
+        }
+        
+        // Validate and Add to Cart
+        function validateAndAddToCart() {
+            if (validateSelection()) {
+                document.getElementById('addToCartForm').submit();
+            }
+        }
+        
+        // Update hidden fields when user selects color, size, or quantity
+        document.addEventListener('DOMContentLoaded', function() {
+            const colorInputs = document.querySelectorAll('input[name="color"]');
+            const sizeInputs = document.querySelectorAll('input[name="sizes[]"]');
+            const qtyInput = document.querySelector('.qty-box');
+            
+            // Update color for both forms
+            colorInputs.forEach(input => {
+                input.addEventListener('change', function() {
+                    document.getElementById('buyNowColor').value = this.value;
+                    document.getElementById('cartColor').value = this.value;
+                });
+            });
+            
+            // Update size for both forms
+            sizeInputs.forEach(input => {
+                input.addEventListener('change', function() {
+                    document.getElementById('buyNowSize').value = this.value;
+                    document.getElementById('cartSize').value = this.value;
+                });
+            });
+            
+            // Update quantity for both forms
+            function updateQty() {
+                document.getElementById('buyNowQty').value = qtyInput.value;
+                document.getElementById('cartQty').value = qtyInput.value;
+            }
+            
+            if (qtyInput) {
+                qtyInput.addEventListener('input', updateQty);
+            }
+            
+            // Also update when plus/minus buttons are clicked
+            const plusBtn = document.querySelector('.plus-btn');
+            const minusBtn = document.querySelector('.minus-btn');
+            
+            if (plusBtn) {
+                plusBtn.addEventListener('click', function() {
+                    setTimeout(updateQty, 10);
+                });
+            }
+            
+            if (minusBtn) {
+                minusBtn.addEventListener('click', function() {
+                    setTimeout(updateQty, 10);
+                });
+            }
+        });
+    </script>
+    <script src="loghome.js"></script>
 </body>
 
 </html>

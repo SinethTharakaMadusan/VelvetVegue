@@ -16,17 +16,20 @@ $sql = "
 SELECT
   p.product_id,
   p.name,
-  p.category,
+  p.main_category,
+  p.subcategory,
   p.gender,
   IFNULL(p.price, 0.00) AS price,
   IFNULL(p.stock, 0) AS stock, 
   p.description,
   (SELECT file_path FROM product_images WHERE product_id = p.product_id ORDER BY sort_order ASC LIMIT 1) AS image_path,
   GROUP_CONCAT(DISTINCT pc.color SEPARATOR ', ') AS colors,
-  GROUP_CONCAT(DISTINCT ps.size  SEPARATOR ', ') AS sizes
+  GROUP_CONCAT(DISTINCT ps.size  SEPARATOR ', ') AS sizes,
+  COALESCE(AVG(r.rating), 0) as avg_rating
 FROM products p
 LEFT JOIN product_color pc ON pc.product_id = p.product_id
 LEFT JOIN product_size ps ON ps.product_id = p.product_id
+LEFT JOIN product_reviews r ON r.product_id = p.product_id
 GROUP BY p.product_id
 ORDER BY p.product_id DESC LIMIT 8
 ";
@@ -38,9 +41,47 @@ if (!$result) {
 
 // Get user first name
 $firstName = "Guest";
-if (isset($_SESSION['user_name'])) {
-    $parts = explode(' ', $_SESSION['user_name']);
-    $firstName = $parts[0];
+$cartCount = 0;
+if (isset($_SESSION['user_id'])) {
+    if (isset($_SESSION['user_name'])) {
+        $parts = explode(' ', $_SESSION['user_name']);
+        $firstName = $parts[0];
+    }
+    
+    // Count cart items
+    $count_sql = "SELECT COUNT(*) as count FROM cart WHERE users_id = ?";
+    $stmt = $conn->prepare($count_sql);
+    $stmt->bind_param("i", $_SESSION['user_id']);
+    $stmt->execute();
+    $result_count = $stmt->get_result();
+    if ($row_count = $result_count->fetch_assoc()) {
+        $cartCount = $row_count['count'];
+    }
+    $stmt->close();
+}
+
+// Fetch recent reviews for homepage display
+$reviews_sql = "
+SELECT 
+    r.review_id,
+    r.rating,
+    r.review_text,
+    r.review_image,
+    r.created_at,
+    u.name as user_name
+FROM product_reviews r
+INNER JOIN users u ON r.user_id = u.users_id
+WHERE r.review_text IS NOT NULL AND r.review_text != ''
+ORDER BY r.created_at DESC
+LIMIT 3
+";
+
+$reviews_result = $conn->query($reviews_sql);
+$reviews = [];
+if ($reviews_result && $reviews_result->num_rows > 0) {
+    while ($review_row = $reviews_result->fetch_assoc()) {
+        $reviews[] = $review_row;
+    }
 }
 ?>
 
@@ -52,7 +93,9 @@ if (isset($_SESSION['user_name'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VelvatVogue</title>
-    <link rel="stylesheet" href="loghome.css">
+    <link rel="icon" type="image/png" href="image/logo.png">
+    <!-- <link rel="stylesheet" href="home.css"> -->
+    <link rel="stylesheet" href="loghome.css?v=2">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://kit.fontawesome.com/416b43dbe0.js" crossorigin="anonymous"></script>
@@ -75,10 +118,10 @@ if (isset($_SESSION['user_name'])) {
         </button>
 
            <ul class="navbar-menu">
-        <li><a class="active" href="Home.html">Home</a></li>
-        <li><a href="#">Shop</a></li>
-        <li><a href="#">About Us</a></li>
-        <li><a href="#">Contact/Help</a></li>
+        <li><a class="active" href="logHome.php">Home</a></li>
+        <li><a href="allproducts.php">Shop</a></li>
+        <li><a href="about.php">About Us</a></li>
+        <li><a href="contact.php">Contact/Help</a></li>
        </ul>
 
         
@@ -92,7 +135,7 @@ if (isset($_SESSION['user_name'])) {
         </div>
             <a href="cart.php" class="icon-box">
                 <i class="fas fa-shopping-cart"></i>
-                <span class="count">3</span>
+                <span class="count"><?php echo $cartCount; ?></span>
             </a>
 
             <div class="user-menu-container">
@@ -101,9 +144,9 @@ if (isset($_SESSION['user_name'])) {
                 </a>
                 <div class="user-dropdown" id="userMenu">
                     
-                     <a href="#"><i class="fas fa-box"></i> My Orders</a>
+                     <a href="myorder.php"><i class="fas fa-box"></i> My Orders</a>
                     <a href="#"><i class="fas fa-heart"></i> Wishlist</a>
-                    <a href="#"><i class="fas fa-user-cog"></i> Profile</a>
+                    <a href="Account.php"><i class="fas fa-user-cog"></i> Profile</a>
                     <hr>
                     
                     <a class="logout" href="Home.php"><i class="fas fa-sign-out-alt"></i>Logout</a>
@@ -159,8 +202,9 @@ if (isset($_SESSION['user_name'])) {
   
 
 <!-- categories -->
-<h2>#Categories</h2>
+<!-- 
 <div class="wrapper">
+  
   <div class="parent">
     <div class="child bg1"></div>
     <button class="category-btn" onclick="location.href='menscasual.html'">See Item ...</button>
@@ -183,10 +227,12 @@ if (isset($_SESSION['user_name'])) {
     <button class="category-btn" onclick="location.href ='womensformal.html'">See Item ...</button>
   
   </div>
-</div>
+</div> -->
 
-<!-- cards -->
-  <h2>#Our Best Collections</h2>
+<!-- card  -->
+
+<h2>#Our Best Collections</h2>
+
 <div class="card-container">
   <?php if ($result->num_rows > 0): ?>
     <?php while($row = $result->fetch_assoc()): 
@@ -197,8 +243,12 @@ if (isset($_SESSION['user_name'])) {
       $name = htmlspecialchars($nameVal);
       $price = number_format((float)$row['price'], 2);
       $img = !empty($row['image_path']) ? htmlspecialchars($row['image_path']) : 'image/no-image.png';
+      $rating = round($row['avg_rating']);
     ?>
-    <div class="card" data-category="<?php echo htmlspecialchars($row['category']); ?>" data-gender="<?php echo htmlspecialchars($row['gender']); ?>">
+    <div class="card" 
+         data-main-category="<?php echo htmlspecialchars($row['main_category'] ?? ''); ?>" 
+         data-subcategory="<?php echo htmlspecialchars($row['subcategory'] ?? ''); ?>" 
+         data-gender="<?php echo htmlspecialchars($row['gender']); ?>">
       <a href="logviewproduct.php?id=<?php echo $row['product_id']; ?>">
         <img src="<?php echo $img; ?>" alt="<?php echo $name; ?>">
       </a>
@@ -208,14 +258,22 @@ if (isset($_SESSION['user_name'])) {
           <h3>Rs. <?php echo $price; ?></h3>
         </a>
         <div class="stars">
-          <i class="fas fa-star"></i>
-          <i class="fas fa-star"></i>
-          <i class="fas fa-star"></i>
-          <i class="fas fa-star"></i>
-          <i class="fas fa-star"></i>
+          <?php for($i = 1; $i <= 5; $i++): ?>
+            <?php if ($i <= $rating): ?>
+                <i class="fas fa-star" style="color: #ffc107;"></i>
+            <?php else: ?>
+                <i class="far fa-star" style="color: #ccc;"></i>
+            <?php endif; ?>
+          <?php endfor; ?>
+          <span style="font-size: 12px; color: #777;">(<?php echo number_format($row['avg_rating'], 1); ?>)</span>
         </div>
         <div class="card-buttons">
-          <a href="#" class="cart">Add to Cart</a>
+          <form action="add_to_cart.php" method="POST" style="width: 100%;">
+            <input type="hidden" name="product_id" value="<?php echo $row['product_id']; ?>">
+            <input type="hidden" name="qty" value="1">
+            <input type="hidden" name="selected_color" value="">
+            <input type="hidden" name="selected_size" value="">
+          </form>
         </div>
       </div>
     </div>
@@ -224,7 +282,6 @@ if (isset($_SESSION['user_name'])) {
     <p style="text-align:center; width:100%;">No products found.</p>
   <?php endif; ?>
 </div>
-
 <!-- <button class="See"> See More ...</button> -->
   
 <!-- promotion -->
@@ -236,66 +293,64 @@ if (isset($_SESSION['user_name'])) {
 <!-- Feedback -->
 
 <section class="review" id="review">
-  <h2 class="Customer"># Customer's review</h2>
-  <div class="box-container">
-    <div class="box">
-      <div class="stars">
-        <i class="fas fa-star"></i>
-        <i class="fas fa-star"></i>
-        <i class="fas fa-star"></i>
-        <i class="fas fa-star"></i>
-        <i class="fas fa-star"></i>
-      </div>
-      <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ducimus nulla aperiam minus rerum quidem earum iste provident sequi autem fugiat.</p>
-      <div class="user">
-        <img src="image/fb1.png" alt="img">
-        <div class="user-info">
-          <h3>John deo</h3>
-          <span>Happ Customer</span>
+  <h2 class="customer-review-title"># Customer's Review</h2>
+  <div class="reviews-container">
+    
+    <?php if (!empty($reviews)): ?>
+      <?php foreach ($reviews as $review): 
+        // Extract user first name for display
+        $review_user_parts = explode(' ', $review['user_name']);
+        $review_first_name = $review_user_parts[0];
+        
+        // Create username handle  
+        $username_handle = '@' . strtolower(str_replace(' ', '', $review['user_name']));
+        
+        // Get rating value
+        $rating = (int)$review['rating'];
+        
+        // Format date
+        $review_date = date('M d, Y', strtotime($review['created_at']));
+      ?>
+      <div class="review-card">
+        <div class="card-top">
+          <div class="profile">
+            <div class="profile-img">
+              <img src="image/fb1.png" alt="<?php echo htmlspecialchars($review['user_name']); ?>">
+            </div>
+            <div class="name-user">
+              <strong><?php echo htmlspecialchars($review_first_name); ?></strong>
+              <span><?php echo htmlspecialchars($username_handle); ?></span>
+            </div>
+          </div>
+          <div class="reviews">
+            <?php 
+            // Display filled stars based on rating
+            for ($i = 1; $i <= 5; $i++): 
+              if ($i <= $rating): ?>
+                <i class="fas fa-star"></i>
+              <?php else: ?>
+                <i class="far fa-star"></i>
+              <?php endif;
+            endfor; 
+            ?>
+          </div>
+        </div>
+        <div class="client-comment">
+          <p><?php echo htmlspecialchars($review['review_text']); ?></p>
+          
+
+          
+          <small style="color: #999; font-size: 0.85rem; margin-top: 10px; display: block;"><?php echo $review_date; ?></small>
         </div>
       </div>
-      <span class="fas fa-quote-right"></span>
-    </div>
+      <?php endforeach; ?>
+    <?php else: ?>
+      <!-- Fallback when no reviews exist -->
+      <div class="no-reviews" style="text-align: center; padding: 40px; color: #777;">
+        <p>No customer reviews yet. Be the first to review a product!</p>
+      </div>
+    <?php endif; ?>
 
-    <div class="box">
-      <div class="stars">
-        <i class="fas fa-star"></i>
-        <i class="fas fa-star"></i>
-        <i class="fas fa-star"></i>
-        <i class="fas fa-star"></i>
-        <i class="fas fa-star"></i>
-      </div>
-      <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ducimus nulla aperiam minus rerum quidem earum iste provident sequi autem fugiat.</p>
-      <div class="user">
-        <img src="image/fb1.png" alt="img">
-        <div class="user-info">
-          <h3>John deo</h3>
-          <span>Happ Customer</span>
-        </div>
-      </div>
-      <span class="fas fa-quote-right"></span>
-    </div>
-
-    <div class="box">
-      <div class="stars">
-        <i class="fas fa-star"></i>
-        <i class="fas fa-star"></i>
-        <i class="fas fa-star"></i>
-        <i class="fas fa-star"></i>
-        <i class="fas fa-star"></i>
-      </div>
-      <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ducimus nulla aperiam minus rerum quidem earum iste provident sequi autem fugiat.</p>
-      <div class="user">
-        <img src="image/fb1.png" alt="img">
-        <div class="user-info">
-          <h3>John deo</h3>
-          <span>Happy Customer</span>
-        </div>
-      </div>
-      <span class="fas fa-quote-right"></span>
-    </div>
-
-   
   </div>
 </section>
 
@@ -320,10 +375,12 @@ if (isset($_SESSION['user_name'])) {
   <div class="footer-content">
     <h3>Quick Links</h3>
     <ul class="list">
-    <li><a href="#">Home</a></li>
-    <li><a href="#">Shop</a></li>
-    <li><a href="#">About Us</a></li>
-    <li><a href="#">Contact/Help</a></li>
+    <li><a href="logHome.php">Home</a></li>
+    <li><a href="allproducts.php">Shop</a></li>
+    <li><a href="about.php">About Us</a></li>
+    <li><a href="contact.php">Contact/Help</a></li>
+    <li><a href="admin_login.php">Admin Log</a></li>
+
     </ul>
   </div>
 

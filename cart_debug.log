@@ -1,0 +1,645 @@
+[2026-01-03 14:07:56] Request received: POST
+[2026-01-03 14:07:56] POST data: Array
+(
+    [product_id] => 37
+)
+
+[2026-01-03 14:07:56] Session data: Array
+(
+    [user_id] => 12
+    [user_name] => thari
+    [is_admin] => 
+)
+
+[2026-01-03 14:08:37] Request received: POST
+[2026-01-03 14:08:37] POST data: Array
+(
+    [product_id] => 32
+)
+
+[2026-01-03 14:08:37] Session data: Array
+(
+    [user_id] => 12
+    [user_name] => thari
+    [is_admin] => 
+)
+
+[2026-01-03 14:09:26] Request received: POST
+[2026-01-03 14:09:26] POST data: Array
+(
+    [product_id] => 34
+)
+
+[2026-01-03 14:09:26] Session data: Array
+(
+    [user_id] => 12
+    [user_name] => thari
+    [is_admin] => 
+)
+
+[2026-01-03 14:57:21] Request received: POST
+[2026-01-03 14:57:21] POST data: Array
+(
+    [product_id] => 35
+)
+
+[2026-01-03 14:57:21] Session data: Array
+(
+    [user_id] => 11
+    [user_name] => Madusan
+    [is_admin] => 
+)
+
+[2026-01-03 14:57:28] Request received: POST
+[2026-01-03 14:57:28] POST data: Array
+(
+    [product_id] => 34
+)
+
+[2026-01-03 14:57:28] Session data: Array
+(
+    [user_id] => 11
+    [user_name] => Madusan
+    [is_admin] => 
+)
+
+[2026-01-03 14:57:35] Request received: POST
+[2026-01-03 14:57:35] POST data: Array
+(
+    [product_id] => 33
+)
+
+[2026-01-03 14:57:35] Session data: Array
+(
+    [user_id] => 11
+    [user_name] => Madusan
+    [is_admin] => 
+)
+
+[2026-01-03 14:57:40] Request received: POST
+[2026-01-03 14:57:40] POST data: Array
+(
+    [product_id] => 32
+)
+
+[2026-01-03 14:57:40] Session data: Array
+(
+    [user_id] => 11
+    [user_name] => Madusan
+    [is_admin] => 
+)
+
+[2026-01-03 15:36:12] Request received: POST
+[2026-01-03 15:36:12] POST data: Array
+(
+    [product_id] => 35
+)
+
+[2026-01-03 15:36:12] Session data: Array
+(
+    [user_id] => 12
+    [user_name] => thari
+    [is_admin] => 
+)
+
+[2026-01-03 15:36:17] Request received: POST
+[2026-01-03 15:36:17] POST data: Array
+(
+    [product_id] => 35
+)
+
+[2026-01-03 15:36:17] Session data: Array
+(
+    [user_id] => 12
+    [user_name] => thari
+    [is_admin] => 
+)
+
+[2026-01-03 15:36:27] Request received: POST
+[2026-01-03 15:36:27] POST data: Array
+(
+    [product_id] => 35
+)
+
+[2026-01-03 15:36:27] Session data: Array
+(
+    [user_id] => 12
+    [user_name] => thari
+    [is_admin] => 
+)
+
+[2026-01-03 15:36:40] Request received: POST
+[2026-01-03 15:36:40] POST data: Array
+(
+    [product_id] => 35
+)
+
+[2026-01-03 15:36:40] Session data: Array
+(
+    [user_id] => 12
+    [user_name] => thari
+    [is_admin] => 
+)
+
+[2026-01-03 15:36:59] Request received: POST
+[2026-01-03 15:36:59] POST data: Array
+(
+    [product_id] => 35
+)
+
+[2026-01-03 15:36:59] Session data: Array
+(
+    [user_id] => 12
+    [user_name] => thari
+    [is_admin] => 
+)
+
+[2026-01-06 15:51:54] Request received: POST
+[2026-01-06 15:51:54] POST data: Array
+(
+    [product_id] => 38
+)
+
+[2026-01-06 15:51:54] Session data: Array
+(
+    [user_id] => 12
+    [user_name] => thari
+    [is_admin] => 
+)
+
+[2026-01-06 16:40:52] Request received: POST
+[2026-01-06 16:40:52] POST data: Array
+(
+    [product_id] => 36
+)
+
+[2026-01-06 16:40:52] Session data: Array
+(
+    [user_id] => 12
+    [user_name] => thari
+    [is_admin] => 
+)
+
+[2026-01-06 16:40:58] Request received: POST
+[2026-01-06 16:40:58] POST data: Array
+(
+    [product_id] => 35
+)
+
+[2026-01-06 16:40:58] Session data: Array
+(
+    [user_id] => 12
+    [user_name] => thari
+    [is_admin] => 
+)
+
+[2026-01-07 05:29:13] Request received: POST
+[2026-01-07 05:29:13] POST data: Array
+(
+    [product_id] => 36
+)
+
+[2026-01-07 05:29:13] Session data: Array
+(
+    [user_id] => 12
+    [user_name] => thari
+    [is_admin] => 
+)
+
+[2026-01-07 05:29:23] Request received: POST
+[2026-01-07 05:29:23] POST data: Array
+(
+    [product_id] => 37
+)
+
+[2026-01-07 05:29:23] Session data: Array
+(
+    [user_id] => 12
+    [user_name] => thari
+    [is_admin] => 
+)
+
+[2026-01-07 05:30:35] Request received: POST
+[2026-01-07 05:30:35] POST data: Array
+(
+    [product_id] => 38
+)
+
+[2026-01-07 05:30:35] Session data: Array
+(
+    [user_id] => 12
+    [user_name] => thari
+    [is_admin] => 
+)
+
+[2026-01-07 05:32:41] Request received: POST
+[2026-01-07 05:32:41] POST data: Array
+(
+    [product_id] => 38
+)
+
+[2026-01-07 05:32:41] Session data: Array
+(
+    [user_id] => 12
+    [user_name] => thari
+    [is_admin] => 
+)
+
+[2026-01-07 05:38:14] Request received: POST
+[2026-01-07 05:38:14] POST data: Array
+(
+    [product_id] => 38
+)
+
+[2026-01-07 05:38:14] Session data: Array
+(
+    [user_id] => 12
+    [user_name] => thari
+    [is_admin] => 
+)
+
+[2026-01-07 05:38:58] Request received: POST
+[2026-01-07 05:38:58] POST data: Array
+(
+    [product_id] => 38
+)
+
+[2026-01-07 05:38:58] Session data: Array
+(
+    [user_id] => 12
+    [user_name] => thari
+    [is_admin] => 
+)
+
+[2026-01-07 05:39:05] Request received: POST
+[2026-01-07 05:39:05] POST data: Array
+(
+    [product_id] => 37
+)
+
+[2026-01-07 05:39:05] Session data: Array
+(
+    [user_id] => 12
+    [user_name] => thari
+    [is_admin] => 
+)
+
+[2026-01-07 05:39:11] Request received: POST
+[2026-01-07 05:39:11] POST data: Array
+(
+    [product_id] => 36
+)
+
+[2026-01-07 05:39:11] Session data: Array
+(
+    [user_id] => 12
+    [user_name] => thari
+    [is_admin] => 
+)
+
+[2026-01-07 05:39:17] Request received: POST
+[2026-01-07 05:39:17] POST data: Array
+(
+    [product_id] => 33
+)
+
+[2026-01-07 05:39:17] Session data: Array
+(
+    [user_id] => 12
+    [user_name] => thari
+    [is_admin] => 
+)
+
+[2026-01-07 05:42:34] Request received: POST
+[2026-01-07 05:42:34] POST data: Array
+(
+    [product_id] => 36
+)
+
+[2026-01-07 05:42:34] Session data: Array
+(
+    [user_id] => 12
+    [user_name] => thari
+    [is_admin] => 
+)
+
+[2026-01-07 06:28:20] Request received: POST
+[2026-01-07 06:28:20] POST data: Array
+(
+    [product_id] => 36
+    [qty] => 1
+    [selected_color] => 
+    [selected_size] => 
+)
+
+[2026-01-07 06:28:20] Session data: Array
+(
+    [user_id] => 12
+    [user_name] => thari
+    [is_admin] => 
+)
+
+[2026-01-07 06:28:20] Product ID: 36, Qty: 1, Color: , Size: 
+[2026-01-07 06:28:20] Inserted new cart item for product 36
+[2026-01-07 06:37:16] Request received: POST
+[2026-01-07 06:37:16] POST data: Array
+(
+    [product_id] => 36
+    [qty] => 1
+    [selected_color] => 
+    [selected_size] => 
+)
+
+[2026-01-07 06:37:16] Session data: Array
+(
+    [user_id] => 12
+    [user_name] => thari
+    [is_admin] => 
+)
+
+[2026-01-07 06:37:16] Product ID: 36, Qty: 1, Color: , Size: 
+[2026-01-07 06:37:16] Inserted new cart item for product 36
+[2026-01-07 06:42:05] Request received: POST
+[2026-01-07 06:42:05] POST data: Array
+(
+    [product_id] => 38
+)
+
+[2026-01-07 06:42:05] Session data: Array
+(
+    [user_id] => 12
+    [user_name] => thari
+    [is_admin] => 
+)
+
+[2026-01-07 06:42:05] Product ID: 38, Qty: 1, Color: , Size: 
+[2026-01-07 06:42:05] Inserted new cart item for product 38
+[2026-01-07 06:43:16] Request received: POST
+[2026-01-07 06:43:16] POST data: Array
+(
+    [product_id] => 38
+    [qty] => 1
+    [selected_color] => brown
+    [selected_size] => M
+)
+
+[2026-01-07 06:43:16] Session data: Array
+(
+    [user_id] => 12
+    [user_name] => thari
+    [is_admin] => 
+)
+
+[2026-01-07 06:43:16] Product ID: 38, Qty: 1, Color: brown, Size: M
+[2026-01-07 06:48:06] Request received: POST
+[2026-01-07 06:48:06] POST data: Array
+(
+    [product_id] => 36
+    [qty] => 1
+    [selected_color] => 
+    [selected_size] => 
+)
+
+[2026-01-07 06:48:06] Session data: Array
+(
+    [user_id] => 12
+    [user_name] => thari
+    [is_admin] => 
+)
+
+[2026-01-07 06:48:06] Product ID: 36, Qty: 1, Color: , Size: 
+[2026-01-07 06:48:06] Inserted new cart item for product 36
+[2026-01-07 07:05:57] Request received: POST
+[2026-01-07 07:05:57] POST data: Array
+(
+    [product_id] => 31
+    [qty] => 1
+    [selected_color] => 
+    [selected_size] => 
+)
+
+[2026-01-07 07:05:57] Session data: Array
+(
+    [user_id] => 12
+    [user_name] => thari
+    [is_admin] => 
+)
+
+[2026-01-07 07:05:57] Product ID: 31, Qty: 1, Color: , Size: 
+[2026-01-07 07:05:57] Inserted new cart item for product 31
+[2026-01-07 07:06:11] Request received: POST
+[2026-01-07 07:06:11] POST data: Array
+(
+    [product_id] => 31
+    [qty] => 1
+    [selected_color] => 
+    [selected_size] => 
+)
+
+[2026-01-07 07:06:11] Session data: Array
+(
+    [user_id] => 12
+    [user_name] => thari
+    [is_admin] => 
+)
+
+[2026-01-07 07:06:11] Product ID: 31, Qty: 1, Color: , Size: 
+[2026-01-07 07:06:11] Updated cart item 26 with new qty: 2
+[2026-01-07 07:19:27] Request received: POST
+[2026-01-07 07:19:27] POST data: Array
+(
+    [product_id] => 34
+    [qty] => 1
+    [selected_color] => beige
+    [selected_size] => 
+)
+
+[2026-01-07 07:19:27] Session data: Array
+(
+    [user_id] => 12
+    [user_name] => thari
+    [is_admin] => 
+)
+
+[2026-01-07 07:19:27] Product ID: 34, Qty: 1, Color: beige, Size: 
+[2026-01-07 07:19:27] Inserted new cart item for product 34
+[2026-01-07 07:19:42] Request received: POST
+[2026-01-07 07:19:42] POST data: Array
+(
+    [product_id] => 34
+    [qty] => 1
+    [selected_color] => navy
+    [selected_size] => 
+)
+
+[2026-01-07 07:19:42] Session data: Array
+(
+    [user_id] => 12
+    [user_name] => thari
+    [is_admin] => 
+)
+
+[2026-01-07 07:19:42] Product ID: 34, Qty: 1, Color: navy, Size: 
+[2026-01-07 07:19:53] Request received: POST
+[2026-01-07 07:19:53] POST data: Array
+(
+    [product_id] => 34
+    [qty] => 1
+    [selected_color] => navy
+    [selected_size] => 
+)
+
+[2026-01-07 07:19:53] Session data: Array
+(
+    [user_id] => 12
+    [user_name] => thari
+    [is_admin] => 
+)
+
+[2026-01-07 07:19:53] Product ID: 34, Qty: 1, Color: navy, Size: 
+[2026-01-07 07:19:53] Inserted new cart item for product 34
+[2026-01-07 07:20:17] Request received: POST
+[2026-01-07 07:20:17] POST data: Array
+(
+    [product_id] => 34
+    [qty] => 1
+    [selected_color] => navy
+    [selected_size] => M
+)
+
+[2026-01-07 07:20:17] Session data: Array
+(
+    [user_id] => 12
+    [user_name] => thari
+    [is_admin] => 
+)
+
+[2026-01-07 07:20:17] Product ID: 34, Qty: 1, Color: navy, Size: M
+[2026-01-07 07:20:17] Inserted new cart item for product 34
+[2026-01-07 08:06:29] Request received: POST
+[2026-01-07 08:06:29] POST data: Array
+(
+    [product_id] => 37
+    [qty] => 1
+    [selected_color] => 
+    [selected_size] => 
+)
+
+[2026-01-07 08:06:29] Session data: Array
+(
+    [user_id] => 12
+    [user_name] => thari
+    [is_admin] => 
+)
+
+[2026-01-07 08:06:29] Product ID: 37, Qty: 1, Color: , Size: 
+[2026-01-07 08:06:29] Inserted new cart item for product 37
+[2026-01-07 12:22:55] Request received: POST
+[2026-01-07 12:22:55] POST data: Array
+(
+    [product_id] => 35
+    [qty] => 1
+    [selected_color] => 
+    [selected_size] => 
+)
+
+[2026-01-07 12:22:55] Session data: Array
+(
+    [user_id] => 12
+    [user_name] => thari
+    [is_admin] => 
+)
+
+[2026-01-07 12:22:55] Product ID: 35, Qty: 1, Color: , Size: 
+[2026-01-07 12:22:55] Inserted new cart item for product 35
+[2026-01-07 14:02:53] Request received: POST
+[2026-01-07 14:02:53] POST data: Array
+(
+    [product_id] => 39
+    [qty] => 2
+    [selected_color] => navy
+    [selected_size] => L
+)
+
+[2026-01-07 14:02:53] Session data: Array
+(
+    [user_id] => 12
+    [user_name] => thari
+    [is_admin] => 
+)
+
+[2026-01-07 14:02:53] Product ID: 39, Qty: 2, Color: navy, Size: L
+[2026-01-07 14:02:53] Inserted new cart item for product 39
+[2026-01-07 14:07:52] Request received: POST
+[2026-01-07 14:07:52] POST data: Array
+(
+    [product_id] => 37
+    [qty] => 1
+    [selected_color] => navy
+    [selected_size] => L
+)
+
+[2026-01-07 14:07:52] Session data: Array
+(
+    [user_id] => 12
+    [user_name] => thari
+    [is_admin] => 
+)
+
+[2026-01-07 14:07:52] Product ID: 37, Qty: 1, Color: navy, Size: L
+[2026-01-07 14:07:52] Inserted new cart item for product 37
+[2026-01-07 15:00:41] Request received: POST
+[2026-01-07 15:00:41] POST data: Array
+(
+    [product_id] => 38
+    [qty] => 1
+    [selected_color] => black
+    [selected_size] => L
+)
+
+[2026-01-07 15:00:41] Session data: Array
+(
+    [user_id] => 13
+    [user_name] => sineth
+    [is_admin] => 
+)
+
+[2026-01-07 15:00:41] Product ID: 38, Qty: 1, Color: black, Size: L
+[2026-01-07 15:00:41] Inserted new cart item for product 38
+[2026-01-08 08:39:36] Request received: POST
+[2026-01-08 08:39:36] POST data: Array
+(
+    [product_id] => 38
+    [qty] => 1
+    [selected_color] => black
+    [selected_size] => L
+)
+
+[2026-01-08 08:39:36] Session data: Array
+(
+    [user_id] => 14
+    [user_name] => Sineth Tharaka Madusan
+    [is_admin] => 
+)
+
+[2026-01-08 08:39:36] Product ID: 38, Qty: 1, Color: black, Size: L
+[2026-01-08 08:39:36] Inserted new cart item for product 38
+[2026-01-10 14:39:41] Request received: POST
+[2026-01-10 14:39:41] POST data: Array
+(
+    [product_id] => 35
+    [qty] => 1
+    [selected_color] => pink
+    [selected_size] => M
+)
+
+[2026-01-10 14:39:41] Session data: Array
+(
+    [user_id] => 16
+    [user_name] => Kamal Werasingha
+    [is_admin] => 
+    [username] => Admin
+)
+
+[2026-01-10 14:39:41] Product ID: 35, Qty: 1, Color: pink, Size: M
+[2026-01-10 14:39:41] Inserted new cart item for product 35

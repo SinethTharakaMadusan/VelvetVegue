@@ -1,0 +1,187 @@
+.account-container {
+
+    display: flex;
+    max-width: 1200px;
+    margin: 30px auto;
+    gap: 30px;
+    padding: 0 20px;
+}
+
+.sidebar {
+    flex: 1;
+    background: #fff;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    height: fit-content;
+
+}
+
+#file-input {
+    display: none
+}
+
+.user-profile {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.profile-image-wrapper {
+    position: relative;
+    display: inline-block;
+    margin: 0 auto;
+}
+
+.user-profile a {
+    color: #333;
+}
+
+.user-profile img {
+    width: 80px !important;
+    height: 80px !important;
+    border-radius: 50% !important;
+    border: 1px solid #ccc;
+    object-fit: cover;
+    display: block;
+    cursor: pointer;
+}
+
+/* Default profile icon */
+.default-profile-icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 1px solid #ccc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f0f0f0;
+    cursor: pointer;
+}
+
+.default-profile-icon i {
+    font-size: 60px;
+    color: #999;
+}
+
+.user-profile img:hover {
+    opacity: 10px;
+    background: #333;
+}
+
+.edit-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(36, 69, 82, 0.8);
+    color: #fff;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    opacity: 0;
+}
+
+.profile-image-wrapper:hover .edit-icon {
+    opacity: 1;
+}
+
+.edit-icon:hover {
+    background: rgba(26, 54, 64, 0.95);
+    transform: translate(-50%, -50%) scale(1.1);
+}
+
+.edit-icon i {
+    font-size: 14px;
+}
+
+.sidebar nav a {
+    display: block;
+    padding: 12px 15px;
+    color: #333;
+    text-decoration: none;
+    margin-bottom: 5px;
+    border-radius: 8px;
+    transition: 0.3s;
+
+}
+
+.sidebar nav a:hover,
+.sidebar nav a.active {
+    background: #244552;
+    color: #fff;
+}
+
+.main-content {
+    flex: 3;
+}
+
+.Profile-card {
+    background: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+.save-btn {
+    background: #244552;
+    color: #fff;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 8px;
+    user-select: none;
+    cursor: pointer;
+}
+
+.save-btn:hover {
+    background: #1a3640;
+}
+
+/* Alert Messages */
+.alert {
+    padding: 12px 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+
+.alert-success {
+    background-color: #d4edda;
+    border: 1px solid #c3e6cb;
+    color: #155724;
+}
+
+.alert-error {
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    color: #721c24;
+}
+
+.profile-card {
+    background: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}

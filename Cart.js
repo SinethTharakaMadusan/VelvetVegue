@@ -1,7 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
     updateTotal();
 
-    
     document.body.addEventListener('click', function (e) {
         if (e.target.closest('.plus-btn')) {
             updateQuantity(e.target.closest('.plus-btn'), 1);
@@ -13,10 +12,45 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     document.body.addEventListener('change', function (e) {
-        if (e.target.classList.contains('select-item') || e.target.classList.contains('qty-box')) {
+        if (e.target.classList.contains('qty-box')) {
+            let qty = parseInt(e.target.value);
+            if (isNaN(qty) || qty < 1) {
+                qty = 1;
+            } else if (qty > 10) {
+                qty = 10;
+            }
+            e.target.value = qty;
+
+            // Update minus button state
+            const container = e.target.closest('.qty-container');
+            const minusBtn = container.querySelector('.minus-btn');
+            if (minusBtn) {
+                minusBtn.disabled = (qty <= 1);
+            }
+
+            updateTotal();
+        } else if (e.target.classList.contains('select-item')) {
             updateTotal();
         }
     });
+
+    // Handle checkout form submission
+    const checkoutForm = document.getElementById('checkoutForm');
+
+    if (checkoutForm) {
+        checkoutForm.addEventListener('submit', function (e) {
+            
+            const checkedItems = document.querySelectorAll('.select-item:checked');
+
+            if (checkedItems.length === 0) {
+                e.preventDefault();
+                alert('Please select at least one item to checkout.');
+                return false;
+            }
+
+            
+        });
+    }
 });
 
 function updateQuantity(btn, change) {
@@ -27,12 +61,18 @@ function updateQuantity(btn, change) {
     if (isNaN(qty)) qty = 1;
     qty += change;
 
-    if (qty < 1) qty = 1;
-   
+    if (qty < 1) {
+        qty = 1;
+    }
+
+    if (qty > 10) {
+        qty = 10;
+
+    }
 
     input.value = qty;
 
-    
+
     const minusBtn = container.querySelector('.minus-btn');
     if (minusBtn) {
         minusBtn.disabled = (qty <= 1);
@@ -43,9 +83,32 @@ function updateQuantity(btn, change) {
 
 function removeCartItem(btn) {
     const item = btn.closest('.cart-item');
-    if (item) {
-        item.remove();
-        updateTotal();
+    const cartId = btn.getAttribute('data-id');
+
+    if (item && cartId) {
+        if (confirm("Are you sure you want to remove this item?")) {
+            fetch('delete_cart.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ cart_id: cartId })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        item.remove();
+                        updateTotal();
+                        location.reload();
+                    } else {
+                        alert('Error removing item: ' + (data.message || 'Unknown error'));
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred while removing the item.');
+                });
+        }
     }
 }
 
@@ -60,7 +123,7 @@ function updateTotal() {
         const qtyBox = item.querySelector(".qty-box");
 
         if (priceEl && qtyBox) {
-            
+
             const priceText = priceEl.innerText.replace(/[^0-9.]/g, '');
             const price = parseFloat(priceText);
             const qty = parseInt(qtyBox.value);
@@ -71,7 +134,7 @@ function updateTotal() {
         }
     });
 
-    
+
     const formattedTotal = subtotal.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
 
     const subtotalEl = document.getElementById("subtotal");

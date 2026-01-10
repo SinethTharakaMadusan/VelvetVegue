@@ -41,8 +41,7 @@ $stmt->execute();
 $result = $stmt->get_result();
 
 if ($row = $result->fetch_assoc()) {
-    // Format data similar to products.php logic
-    $row['price'] = number_format((float)$row['price'], 2, '.', ''); // keep as number/string for JS
+    $row['price'] = number_format((float)$row['price'], 2, '.', ''); 
     if (empty($row['image_path'])) {
         $row['image_path'] = 'image/no-image.png';
     }

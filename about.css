@@ -1,0 +1,236 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Playwrite+AU+QLD:wght@100..400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=League+Spartan:wght@100..900&family=Playwrite+AU+QLD:wght@100..400&display=swap');
+
+* {
+    font-family: lato, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.banner img {
+    width: 100%;
+    height: 90vh;
+    background-size: cover;
+    background-position: center;
+    margin: auto;
+}
+
+.mission {
+    border: 2px solid #ccc;
+    border-radius: 20px;
+    background-color: #ffffff;
+    padding: 20px;
+}
+
+.mission h2 {
+    font-size: 40px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.mission-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.mission-container img {
+    width: 250px;
+    height: auto;
+    object-fit: cover;
+}
+
+.mission-container p {
+    font-size: 18px;
+    line-height: 1.5;
+    font-weight: 400;
+    color: #8a8a8a;
+    max-width: 600px;
+}
+
+.content-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    padding: 40px 9%;
+    flex: 1;
+}
+
+/* --- FOOTER STYLES --- */
+
+footer {
+    background: #484848;
+    color: #fff;
+    padding: 40px 0;
+    text-align: center;
+    margin-top: 50px;
+}
+
+.container {
+    width: 90%;
+    max-width: 1140px;
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    gap: 50px;
+    /* Reduced gap from 150px for better fit */
+    flex-wrap: wrap;
+    /* Allows wrapping on smaller screens */
+}
+
+.footer-logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    max-width: 200px;
+    margin-bottom: 20px;
+}
+
+.footer-content {
+    flex: 1;
+    min-width: 250px;
+    /* Ensures columns don't get too squashed */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+h3 {
+    font-size: 28px;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.footer-content p {
+    width: 100%;
+    max-width: 250px;
+    margin: 0 auto;
+    padding: 7px;
+    font-size: 14px;
+}
+
+.list {
+    padding: 0;
+    list-style: none;
+}
+
+.list li {
+    padding: 7px;
+    position: relative;
+}
+
+.list li a {
+    text-decoration: none;
+    color: #fff;
+    /* Changed from black to visible on dark bg */
+    font-size: 16px;
+    transition: color 0.3s;
+}
+
+.list li a:hover {
+    color: #b7b7b7;
+}
+
+/* Link hover effect */
+.list li::before {
+    content: '';
+    position: absolute;
+    transform: translate(-50%, -50%);
+    left: 50%;
+    top: 100%;
+    width: 0;
+    height: 2px;
+    background: #fff;
+    /* White underline for visibility */
+    transition-duration: .5s;
+}
+
+.list li:hover::before {
+    width: 70px;
+}
+
+.social-icons {
+    text-align: center;
+    padding: 0;
+    list-style: none;
+}
+
+.social-icons li {
+    display: inline-block;
+    padding: 5px;
+}
+
+.social-icons i {
+    color: #fff;
+    /* White icons */
+    font-size: 25px;
+    transition: color 0.3s;
+}
+
+.social-icons i:hover {
+    color: #b7b7b7;
+}
+
+.bottom-bar {
+    background: #303030;
+    text-align: center;
+    padding: 10px 0;
+}
+
+.bottom-bar p {
+    color: #fff;
+    margin: 0;
+    font-size: 14px;
+    padding: 7px;
+}
+
+/* RESPONSIVE DESIGN */
+@media screen and (max-width: 900px) {
+    .container {
+        gap: 30px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .container {
+        flex-direction: column;
+        align-items: center;
+        gap: 40px;
+    }
+
+    .footer-content {
+        width: 100%;
+        text-align: center;
+    }
+
+    .footer-logo {
+        margin: 0 auto 20px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .mission h2 {
+        font-size: 28px;
+    }
+
+    .mission-container img {
+        width: 100%;
+    }
+
+    h3 {
+        font-size: 24px;
+    }
+}

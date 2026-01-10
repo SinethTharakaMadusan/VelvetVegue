@@ -13,7 +13,7 @@ if (!isset($conn) || !$conn) {
 
 out('MySQL client: ' . mysqli_get_client_info());
 
-// Current selected database
+
 $res = mysqli_query($conn, "SELECT DATABASE() AS db");
 if ($res) {
     $row = mysqli_fetch_assoc($res);
@@ -22,7 +22,6 @@ if ($res) {
     out('Unable to determine current database: ' . mysqli_error($conn));
 }
 
-// Check common tables
 $tables = ['products','product_images','product_color','products_size'];
 foreach ($tables as $t) {
     $ok = mysqli_query($conn, "SHOW TABLES LIKE '" . mysqli_real_escape_string($conn, $t) . "'");

@@ -19,7 +19,8 @@ if (isset($_GET['id'])) {
     SELECT
       p.product_id,
       p.name,
-      p.category,
+      p.main_category,
+      p.subcategory,
       p.gender,
       IFNULL(p.price, 0.00) AS price,
       IFNULL(p.stock, 0) AS stock, 
@@ -76,7 +77,8 @@ $sql = "
 SELECT
   p.product_id,
   p.name,
-  p.category,
+  p.main_category,
+  p.subcategory,
   p.gender,
   IFNULL(p.price, 0.00) AS price,
   IFNULL(p.stock, 0) AS stock, 
@@ -127,7 +129,7 @@ if (!$result) {
             <ul class="navbar-menu">
                 <li><a class="active" href="Home.html">Home</a></li>
                 <li><a href="#">Shop</a></li>
-                <li><a href="#">About Us</a></li>
+                <li><a href="about.php">About Us</a></li>
                 <li><a href="#">Contact/Help</a></li>
             </ul>
 
@@ -156,7 +158,7 @@ if (!$result) {
             </div>
 
             <div class="col-2">
-                <p>Home / <?php echo htmlspecialchars($product['category']); ?></p>
+                <p>Home / <?php echo htmlspecialchars($product['main_category'] ?? ''); ?> / <?php echo htmlspecialchars($product['subcategory'] ?? ''); ?></p>
                 <h1><?php echo htmlspecialchars($product['name']); ?></h1>
                 <h4>Rs. <?php echo number_format($product['price'], 2); ?></h4>
 
@@ -250,7 +252,10 @@ if (!$result) {
       $price = number_format((float)$row['price'], 2);
       $img = !empty($row['image_path']) ? htmlspecialchars($row['image_path']) : 'image/no-image.png';
     ?>
-    <div class="card" data-category="<?php echo htmlspecialchars($row['category']); ?>" data-gender="<?php echo htmlspecialchars($row['gender']); ?>">
+    <div class="card" 
+         data-main-category="<?php echo htmlspecialchars($row['main_category'] ?? ''); ?>" 
+         data-subcategory="<?php echo htmlspecialchars($row['subcategory'] ?? ''); ?>" 
+         data-gender="<?php echo htmlspecialchars($row['gender']); ?>">
       <a href="viewproduct.php?id=<?php echo $row['product_id']; ?>">
         <img src="<?php echo $img; ?>" alt="<?php echo $name; ?>">
       </a>

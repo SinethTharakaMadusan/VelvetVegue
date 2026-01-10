@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", function () {
             let val = parseInt(qtyBox.value);
             if (isNaN(val)) val = 1;
             minusBtn.disabled = val <= 1;
-            // Assuming max quantity is 10 as per original logic
+            
             plusBtn.disabled = val >= 10;
         }
 
@@ -87,45 +87,42 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
-// Search Function
+
 function searchFunction() {
     const input = document.querySelector('.Search');
     const filter = input.value.toUpperCase();
     const container = document.querySelector('.card-container');
     const cards = container.getElementsByClassName('card');
 
-    // Elements to hide/show
     const mainProduct = document.querySelector('.single-product');
     const infoRows = document.querySelectorAll('.product-info-row');
     const headers = document.querySelectorAll('h2');
 
-    // Determine visibility state
+    
     const isSearching = filter.length > 0;
 
-    // Toggle Main Product Section
+    
     if (mainProduct) {
         mainProduct.style.display = isSearching ? 'none' : 'block';
     }
 
-    // Toggle Info Rows (Tabs, Shipping)
+    
     infoRows.forEach(row => {
         row.style.display = isSearching ? 'none' : 'flex';
     });
 
-    // Toggle Specific Headers (#Categories, etc if present, or just the More... header)
+   
     headers.forEach(h2 => {
         const text = h2.textContent || h2.innerText;
-        // Hide the "More [Gender] Clothing" header when searching if desired, or keep it.
-        // Based on "hide under all element search result", we likely want to maximize space.
-        // Let's hide the "More [Gender] Clothing" header when searching.
+        
         if (text.includes('Clothing')) {
             h2.style.display = isSearching ? 'none' : 'block';
         }
     });
 
-    // Ensure container is visible
+    
     if (container) {
-        container.style.display = 'flex'; // Ensure flex layout is maintained
+        container.style.display = 'flex'; 
     }
 
     // Filter Products
@@ -139,7 +136,7 @@ function searchFunction() {
             const combinedText = `${title} ${category} ${gender}`;
 
             if (combinedText.toUpperCase().indexOf(filter) > -1) {
-                // Use 'flex' to maintain card layout, or inherit from CSS class
+                
                 cards[i].style.display = "flex";
             } else {
                 cards[i].style.display = "none";
@@ -148,7 +145,7 @@ function searchFunction() {
     }
 }
 
-// Add enter key listener for search input
+
 document.addEventListener('DOMContentLoaded', function () {
     const searchInput = document.querySelector('.Search');
     if (searchInput) {
@@ -156,7 +153,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (event.key === 'Enter') {
                 searchFunction();
             } else if (searchInput.value === '') {
-                // Restore view if input is cleared via backspace
+                
                 searchFunction();
             }
         });

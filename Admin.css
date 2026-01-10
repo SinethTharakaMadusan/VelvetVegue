@@ -31,12 +31,19 @@ body {
 
 .sidebar {
     width: 260px;
+    height: 100vh;
     background: linear-gradient(180deg, var(--sidebar) 0%,
             var(--sidebar-contrast) 100%);
     color: #fff;
     padding: 20px;
     display: flex;
-    flex-direction: column
+    flex-direction: column;
+    overflow: hidden;
+    margin-left: 0;
+    position: sticky;
+    top: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .logo-container {

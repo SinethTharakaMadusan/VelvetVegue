@@ -1,6 +1,6 @@
 .Search-container {
     margin: 40px;
-  
+
 }
 
 .single-product {
@@ -85,7 +85,14 @@
 .single-product .col-2 .small-image-row img {
     height: 100px;
     width: 100%;
+    cursor: pointer;
+    transition: transform 0.2s, border 0.2s;
+    border: 2px solid transparent;
+}
 
+.single-product .col-2 .small-image-row img:hover {
+    transform: scale(1.05);
+    border: 2px solid #244551;
 }
 
 .color-picker {
@@ -366,12 +373,100 @@
 
     text-align: center;
     margin: 20px auto;
+}
 
-
+.reviews-list {
+    text-align: left;
+    margin-top: 20px;
 }
 
 .tab-content.active {
     display: block;
+}
+
+.review-item {
+    background: #fff;
+    border: 1px solid #eee;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s;
+}
+
+.review-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+.review-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #f0f0f0;
+    padding-bottom: 10px;
+}
+
+.reviewer-name {
+    font-weight: 700;
+    font-size: 16px;
+    color: #2c3e50;
+    display: block;
+}
+
+.review-date {
+    font-size: 12px;
+    color: #95a5a6;
+}
+
+.review-rating .fa-star {
+    color: #e0e0e0;
+    font-size: 14px;
+}
+
+.review-rating .fa-star.filled {
+    color: #f1c40f;
+}
+
+.review-text {
+    color: #555;
+    line-height: 1.6;
+    margin-top: 10px !important;
+    font-size: 14px;
+}
+
+.review-image {
+    margin-top: 15px;
+}
+
+/* More specific selector to ensure override */
+/* Specific class for review thumbnail */
+.review-img-thumb {
+    width: 80px !important;
+    height: 80px !important;
+    object-fit: cover !important;
+    border-radius: 8px !important;
+    cursor: pointer;
+    border: 2px solid #ecf0f1 !important;
+    transition: all 0.3s ease;
+    display: block !important;
+}
+
+.review-img-thumb:hover {
+    transform: scale(1.05);
+    border-color: #3498db !important;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.no-reviews {
+    color: #7f8c8d;
+    font-style: italic;
+    margin-top: 20px !important;
+    text-align: center;
+    padding: 40px;
+    background: #f9f9f9;
+    border-radius: 10px;
 }
 
 /* Shipping Section */
@@ -424,11 +519,12 @@
     }
 }
 
+/* Keep desktop button sizing consistent up to tablet breakpoints */
 @media only screen and (max-width: 1400px) {
 
     .buy-btn,
     .cart-btn {
-        padding: 5px 40px;
+        padding: 12px 40px;
     }
 }
 
@@ -442,9 +538,33 @@
         font-size: 36px;
     }
 
+    /* Maintain button size on medium screens */
     .buy-btn,
     .cart-btn {
-        padding: 5px 40px;
+        padding: 12px 40px;
+    }
+}
+
+/* Keep buttons on a single line for screens wider than 1140px */
+@media only screen and (min-width: 1141px) {
+    .btn-container {
+        flex-wrap: nowrap;
+    }
+
+    .buy-btn,
+    .cart-btn {
+        padding: 12px 20px;
+    }
+}
+
+@media only screen and (min-width: 1141px) and (max-width: 1600px) {
+    .btn-container {
+        flex-wrap: nowrap;
+    }
+
+    .buy-btn,
+    .cart-btn {
+        padding: 12px 20px;
     }
 }
 
@@ -461,7 +581,7 @@
 
     .buy-btn,
     .cart-btn {
-        padding: 7px 40px;
+        padding: 7px 30px;
     }
 }
 
@@ -520,5 +640,77 @@
         padding: 12px 0;
 
         margin-left: 20px;
+    }
+}
+
+/* Related Products Section */
+.title {
+    margin-bottom: 30px !important;
+}
+
+.card-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 25px;
+    margin: 40px auto;
+    padding: 0 20px;
+    max-width: 1400px;
+}
+
+.card {
+    flex-basis: 23%;
+    min-width: 250px;
+    background: #fff;
+    border: 1px solid #f0f0f0;
+    padding: 10px;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.card img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+.card h3 {
+    font-size: 18px;
+    color: #244551;
+    margin: 10px 0;
+}
+
+.card p {
+    color: #555;
+    font-size: 14px;
+    height: 40px;
+    overflow: hidden;
+}
+
+.card .stars {
+    color: #ffc107;
+    margin-top: 5px;
+    font-size: 14px;
+}
+
+/* Responsive for cards */
+@media only screen and (max-width: 900px) {
+    .card {
+        flex-basis: 45%;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    .card {
+        flex-basis: 100%;
     }
 }

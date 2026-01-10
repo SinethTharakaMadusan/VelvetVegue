@@ -1,83 +1,121 @@
-@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Playwrite+AU+QLD:wght@100..400&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=League+Spartan:wght@100..900&family=Playwrite+AU+QLD:wght@100..400&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=League+Spartan:wght@100..900&family=Playwrite+AU+QLD:wght@100..400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&display=swap');
 
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-.payment-method-selection {
-    max-width: 500px;
+body {
     font-family: 'League Spartan', sans-serif;
-    margin: 0 auto;
+    background-color: #f7f7f7;
 }
 
-.payment-method-selection h2 {
-    margin-bottom: 15px;
-    font-size: 1.4em;
-
+.payment-method-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 20px;
 }
 
-.payment-method-selection input[type="radio"] {
-    display: none;
+/* Left Section - Payment Methods */
+.left-section {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.left-section h2 {
+    font-size: 24px;
+    color: #244551;
+    margin-bottom: 20px;
+}
+
+.payment-options {
+    margin-bottom: 30px;
 }
 
 .payment-option {
     display: flex;
-    justify-content: space-between;
     align-items: center;
     padding: 15px;
-    border: 2px solid #ccc;
-    border-radius: 6px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 15px;
     cursor: pointer;
-    transition: all 0.2s ease-in-out;
-    margin-top: 15px;
+    transition: all 0.3s ease;
 }
 
 .payment-option:hover {
-    border-color: #999;
+    border-color: #244551;
+    background-color: #f8f9fa;
 }
 
-.payment-method-selection input[type="radio"]:checked+.payment-option {
-    border-color: #0d861f;
-    background-color: #e9f5ff;
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+.payment-option input[type="radio"] {
+    width: 20px;
+    height: 20px;
+    margin-right: 15px;
+    cursor: pointer;
 }
 
-.option-details {
+.payment-option input[type="radio"]:checked+label {
+    color: #244551;
+    font-weight: 600;
+}
+
+.payment-option label {
     display: flex;
-    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    flex: 1;
 }
 
-.option-title {
-    font-weight: bold;
-    font-size: 1.1em;
-    color: #333;
+.payment-option label i {
+    font-size: 20px;
+    color: #244551;
 }
 
-.option-subtitle {
-    font-size: 0.9em;
-    color: #777;
-    margin-top: 3px;
-
-}
-
-#cod {
-    color: #0baf24;
-}
-
-#card {
-    color: #e4db53;
-}
-
-
-/* card adding */
-
-.card-details-form {
+/* Shipping Info */
+.shipping-info {
+    background: #f8f9fa;
     padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 0 0 6px 6px;
-    background-color: #f9f9f9;
-    width: 50%;
-    margin: 0 auto;
-    margin-top: 20px;
+    border-radius: 8px;
+    border-left: 4px solid #244551;
+}
+
+.shipping-info h3 {
+    font-size: 18px;
+    color: #244551;
+    margin-bottom: 15px;
+}
+
+.shipping-info p {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 8px;
+    line-height: 1.6;
+}
+
+/* Card Details Form */
+.card-details-form {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    border: 2px solid #244551;
+    display: none;
+    /* Hidden by default */
+}
+
+.card-details-form h3 {
+    font-size: 18px;
+    color: #244551;
+    margin-bottom: 15px;
 }
 
 .form-group {
@@ -86,25 +124,30 @@
 
 .form-group label {
     display: block;
-    font-weight: bold;
-    margin-bottom: 5px;
-    font-size: 0.9em;
-    color: #555;
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 8px;
 }
 
 .form-group input[type="text"] {
-    width: 50%;
-    padding: 10px;
+    width: 100%;
+    padding: 12px 15px;
     border: 1px solid #ddd;
-    border-radius: 4px;
-    box-sizing: border-box;
-    font-size: 1em;
+    border-radius: 6px;
+    font-size: 14px;
+    font-family: 'League Spartan', sans-serif;
+    transition: border-color 0.3s;
+}
 
+.form-group input[type="text"]:focus {
+    outline: none;
+    border-color: #244551;
 }
 
 .form-group-split {
     display: flex;
-    gap: 20px;
+    gap: 15px;
 }
 
 .expiry-group {
@@ -118,33 +161,209 @@
 .expiry-inputs {
     display: flex;
     align-items: center;
+    gap: 5px;
 }
 
 .expiry-inputs input {
     width: 45%;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
     text-align: center;
+    font-family: 'League Spartan', sans-serif;
+}
+
+.expiry-inputs input:focus {
+    outline: none;
+    border-color: #244551;
 }
 
 .expiry-inputs span {
-    margin: 0 5px;
-    font-size: 1.2em;
+    font-size: 18px;
+    color: #555;
+    font-weight: 600;
+}
+
+.cvv-group input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+    text-align: center;
+    font-family: 'League Spartan', sans-serif;
+}
+
+.cvv-group input:focus {
+    outline: none;
+    border-color: #244551;
+}
+
+/* Right Section - Order Summary */
+.right-section {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.right-section h2 {
+    font-size: 24px;
+    color: #244551;
+    margin-bottom: 20px;
+}
+
+/* Order Items */
+.order-items {
+    max-height: 400px;
+    overflow-y: auto;
+    margin-bottom: 20px;
+    padding-right: 10px;
+}
+
+.order-items::-webkit-scrollbar {
+    width: 6px;
+}
+
+.order-items::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.order-items::-webkit-scrollbar-thumb {
+    background: #244551;
+    border-radius: 10px;
+}
+
+.order-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.order-item img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.item-details {
+    flex: 1;
+}
+
+.item-name {
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 5px;
+    font-weight: 500;
+}
+
+.item-qty {
+    font-size: 13px;
+    color: #777;
+}
+
+.item-price {
+    font-size: 16px;
+    font-weight: 600;
+    color: #244551;
+}
+
+/* Order Totals */
+.order-totals {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.total-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    font-size: 15px;
     color: #555;
 }
 
-
-/* card adding end */
-
-
-.pay-btn {
-    color: #fff;
-    background-color: red;
-    padding: 10px 70px;
-    font-family: 'League Spartan', sans-serif;
-    font-weight: bold;
+.order-totals hr {
     border: none;
+    border-top: 1px solid #ddd;
+    margin: 15px 0;
+}
+
+.grand-total {
+    font-size: 20px;
+    font-weight: 700;
+    color: #244551;
+    margin-top: 15px;
+}
+
+/* Place Order Button */
+.place-order-btn {
+    width: 100%;
+    padding: 15px;
+    background-color: #e60000;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 18px;
+    font-weight: 600;
     cursor: pointer;
-    font-size: 1em;
+    transition: background-color 0.3s;
     text-transform: uppercase;
-    display: block;
-    margin: 20px auto;
+}
+
+.place-order-btn:hover {
+    background-color: #cc0000;
+}
+
+.place-order-btn:active {
+    transform: scale(0.98);
+}
+
+/* Responsive Design */
+@media (max-width: 900px) {
+    .payment-method-container {
+        grid-template-columns: 1fr;
+    }
+
+    .left-section,
+    .right-section {
+        padding: 20px;
+    }
+
+    .order-items {
+        max-height: 300px;
+    }
+}
+
+@media (max-width: 600px) {
+    .payment-method-container {
+        padding: 10px;
+        gap: 20px;
+    }
+
+    .left-section h2,
+    .right-section h2 {
+        font-size: 20px;
+    }
+
+    .order-item {
+        flex-wrap: wrap;
+    }
+
+    .order-item img {
+        width: 50px;
+        height: 50px;
+    }
+
+    .item-price {
+        width: 100%;
+        text-align: right;
+        margin-top: 10px;
+    }
 }

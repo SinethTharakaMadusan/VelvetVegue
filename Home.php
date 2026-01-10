@@ -1,31 +1,25 @@
 <?php
 require_once 'Database.php';
 
-// Check if delete request
-if (isset($_GET['delete_id'])) {
-    $del_id = (int)$_GET['delete_id'];
-    // Optional: Add deletion logic here or redirect to a delete script
-    // For now, we'll just redirect to avoid re-submission issues if logic were here
-    // header("Location: products.php"); 
-}
 
-// Fetch products
-// Note: 'stock' column is missing in the provided schema, defaulting to 0.
 $sql = "
 SELECT
   p.product_id,
   p.name,
-  p.category,
+  p.main_category,
+  p.subcategory,
   p.gender,
   IFNULL(p.price, 0.00) AS price,
   IFNULL(p.stock, 0) AS stock, 
   p.description,
   (SELECT file_path FROM product_images WHERE product_id = p.product_id ORDER BY sort_order ASC LIMIT 1) AS image_path,
   GROUP_CONCAT(DISTINCT pc.color SEPARATOR ', ') AS colors,
-  GROUP_CONCAT(DISTINCT ps.size  SEPARATOR ', ') AS sizes
+  GROUP_CONCAT(DISTINCT ps.size  SEPARATOR ', ') AS sizes,
+  COALESCE(AVG(r.rating), 0) as avg_rating
 FROM products p
 LEFT JOIN product_color pc ON pc.product_id = p.product_id
 LEFT JOIN product_size ps ON ps.product_id = p.product_id
+LEFT JOIN product_reviews r ON r.product_id = p.product_id
 GROUP BY p.product_id
 ORDER BY p.product_id DESC LIMIT 8
 ";
@@ -33,6 +27,29 @@ ORDER BY p.product_id DESC LIMIT 8
 $result = $conn->query($sql);
 if (!$result) {
     die('DB error: ' . $conn->error);
+}
+
+$reviews_sql = "
+SELECT 
+    r.review_id,
+    r.rating,
+    r.review_text,
+    r.review_image,
+    r.created_at,
+    u.name as user_name
+FROM product_reviews r
+INNER JOIN users u ON r.user_id = u.users_id
+WHERE r.review_text IS NOT NULL AND r.review_text != ''
+ORDER BY r.created_at DESC
+LIMIT 3
+";
+
+$reviews_result = $conn->query($reviews_sql);
+$reviews = [];
+if ($reviews_result && $reviews_result->num_rows > 0) {
+    while ($review_row = $reviews_result->fetch_assoc()) {
+        $reviews[] = $review_row;
+    }
 }
 ?>
 
@@ -44,7 +61,9 @@ if (!$result) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VelvatVogue</title>
-    <link rel="stylesheet" href="home.css">
+    <link rel="icon" type="image/png" href="image/logo.png">
+    <!-- <link rel="stylesheet" href="logHome.css"> -->
+    <link rel="stylesheet" href="home.css?v=1">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://kit.fontawesome.com/416b43dbe0.js" crossorigin="anonymous"></script>
@@ -68,15 +87,15 @@ if (!$result) {
 
            <ul class="navbar-menu">
         <li><a class="active" href="Home.html">Home</a></li>
-        <li><a href="#">Shop</a></li>
-        <li><a href="#">About Us</a></li>
+        <li><a href="allproducts.php">Shop</a></li>
+        <li><a href="about.php">About Us</a></li>
         <li><a href="#">Contact/Help</a></li>
        </ul>
 
         
         <!-- <button class="regbtn">Register/Login</button> -->
          <div class="navbar-right">
-        <a href="Register.php" class="regbtn">Register/Login</a>
+        <a href="log.php" class="regbtn">Register/Login</a>
         <a href="cart.html"><i class="fas fa-shopping-cart"></i></a>
         <i class="fas fa-user"></i>
 
@@ -171,8 +190,12 @@ if (!$result) {
       $name = htmlspecialchars($nameVal);
       $price = number_format((float)$row['price'], 2);
       $img = !empty($row['image_path']) ? htmlspecialchars($row['image_path']) : 'image/no-image.png';
+      $rating = round($row['avg_rating']);
     ?>
-    <div class="card" data-category="<?php echo htmlspecialchars($row['category']); ?>" data-gender="<?php echo htmlspecialchars($row['gender']); ?>">
+    <div class="card" 
+         data-main-category="<?php echo htmlspecialchars($row['main_category'] ?? ''); ?>" 
+         data-subcategory="<?php echo htmlspecialchars($row['subcategory'] ?? ''); ?>" 
+         data-gender="<?php echo htmlspecialchars($row['gender']); ?>">
       <a href="viewproduct.php?id=<?php echo $row['product_id']; ?>">
         <img src="<?php echo $img; ?>" alt="<?php echo $name; ?>">
       </a>
@@ -182,14 +205,14 @@ if (!$result) {
           <h3>Rs. <?php echo $price; ?></h3>
         </a>
         <div class="stars">
-          <i class="fas fa-star"></i>
-          <i class="fas fa-star"></i>
-          <i class="fas fa-star"></i>
-          <i class="fas fa-star"></i>
-          <i class="fas fa-star"></i>
-        </div>
-        <div class="card-buttons">
-          <a href="Register.php" class="cart">Add to Cart</a>
+          <?php for($i = 1; $i <= 5; $i++): ?>
+            <?php if ($i <= $rating): ?>
+                <i class="fas fa-star" style="color: #ffc107;"></i>
+            <?php else: ?>
+                <i class="far fa-star" style="color: #ccc;"></i>
+            <?php endif; ?>
+          <?php endfor; ?>
+          <span style="font-size: 12px; color: #777;">(<?php echo number_format($row['avg_rating'], 1); ?>)</span>
         </div>
       </div>
     </div>
@@ -212,64 +235,58 @@ if (!$result) {
 <section class="review" id="review">
   <h2 class="Customer"># Customer's review</h2>
   <div class="box-container">
-    <div class="box">
-      <div class="stars">
-        <i class="fas fa-star"></i>
-        <i class="fas fa-star"></i>
-        <i class="fas fa-star"></i>
-        <i class="fas fa-star"></i>
-        <i class="fas fa-star"></i>
-      </div>
-      <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ducimus nulla aperiam minus rerum quidem earum iste provident sequi autem fugiat.</p>
-      <div class="user">
-        <img src="image/fb1.png" alt="img">
-        <div class="user-info">
-          <h3>John deo</h3>
-          <span>Happ Customer</span>
+    
+    <?php if (!empty($reviews)): ?>
+      <?php foreach ($reviews as $review): 
+        // Extract user first name for display
+        $review_user_parts = explode(' ', $review['user_name']);
+        $review_first_name = $review_user_parts[0];
+        
+        // Create username handle  
+        $username_handle = '@' . strtolower(str_replace(' ', '', $review['user_name']));
+        
+        // Get rating value
+        $rating = (int)$review['rating'];
+        
+        // Format date
+        $review_date = date('M d, Y', strtotime($review['created_at']));
+      ?>
+      <div class="box">
+        <div class="stars">
+            <?php 
+            for ($i = 1; $i <= 5; $i++): 
+              if ($i <= $rating): ?>
+                <i class="fas fa-star" style="color: #ffc107;"></i>
+              <?php else: ?>
+                <i class="far fa-star" style="color: #ccc;"></i>
+              <?php endif;
+            endfor; 
+            ?>
         </div>
-      </div>
-      <span class="fas fa-quote-right"></span>
-    </div>
-
-    <div class="box">
-      <div class="stars">
-        <i class="fas fa-star"></i>
-        <i class="fas fa-star"></i>
-        <i class="fas fa-star"></i>
-        <i class="fas fa-star"></i>
-        <i class="fas fa-star"></i>
-      </div>
-      <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ducimus nulla aperiam minus rerum quidem earum iste provident sequi autem fugiat.</p>
-      <div class="user">
-        <img src="image/fb1.png" alt="img">
-        <div class="user-info">
-          <h3>John deo</h3>
-          <span>Happ Customer</span>
+        <p><?php echo htmlspecialchars($review['review_text']); ?></p>
+        <div class="user">
+            <div class="user-img-container" style="width: 50px; height: 50px; border-radius: 50%; overflow: hidden; margin-right: 10px;">
+                <img src="image/fb1.png" alt="<?php echo htmlspecialchars($review['user_name']); ?>" style="width: 100%; height: 100%; object-fit: cover;">
+            </div>
+          <div class="user-info">
+            <h3><?php echo htmlspecialchars($review_first_name); ?></h3>
+            <span><?php echo htmlspecialchars($username_handle); ?></span>
+          </div>
         </div>
-      </div>
-      <span class="fas fa-quote-right"></span>
-    </div>
+        
 
-    <div class="box">
-      <div class="stars">
-        <i class="fas fa-star"></i>
-        <i class="fas fa-star"></i>
-        <i class="fas fa-star"></i>
-        <i class="fas fa-star"></i>
-        <i class="fas fa-star"></i>
-      </div>
-      <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ducimus nulla aperiam minus rerum quidem earum iste provident sequi autem fugiat.</p>
-      <div class="user">
-        <img src="image/fb1.png" alt="img">
-        <div class="user-info">
-          <h3>John deo</h3>
-          <span>Happy Customer</span>
-        </div>
-      </div>
-      <span class="fas fa-quote-right"></span>
-    </div>
 
-   
+        <span class="fas fa-quote-right"></span>
+        <div class="date-label" style="font-size: 12px; color: #999; margin-top: 10px;"><?php echo $review_date; ?></div>
+      </div>
+      <?php endforeach; ?>
+    <?php else: ?>
+      <!-- Fallback when no reviews exist -->
+      <div class="no-reviews" style="text-align: center; width: 100%; color: #777;">
+        <p>No customer reviews yet. Be the first to review a product!</p>
+      </div>
+    <?php endif; ?>
+
   </div>
 </section>
 

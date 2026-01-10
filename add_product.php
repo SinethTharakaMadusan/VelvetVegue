@@ -9,7 +9,8 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 }
 
 $name = isset($_POST['name']) ? trim($_POST['name']) : '';
-$category = isset($_POST['category']) ? trim($_POST['category']) : '';
+$mainCategory = isset($_POST['main_category']) ? trim($_POST['main_category']) : '';
+$subcategory = isset($_POST['subcategory']) ? trim($_POST['subcategory']) : '';
 $gender = isset($_POST['gender']) ? trim($_POST['gender']) : '';
 $description = isset($_POST['description']) ? trim($_POST['description']) : '';
 $price = isset($_POST['price']) ? trim($_POST['price']) : '';
@@ -20,7 +21,8 @@ $sizes = isset($_POST['sizes']) && is_array($_POST['sizes']) ? array_values($_PO
 
 $errors = [];
 if($name === '') $errors[] = 'Product name is required';
-if($category === '') $errors[] = 'Category is required';
+if($mainCategory === '') $errors[] = 'Main category is required';
+if($subcategory === '') $errors[] = 'Subcategory is required';
 if($description === '') $errors[] = 'Description is required';
 
 $price_value = 0.00;
@@ -79,10 +81,10 @@ try {
         if ($alterStock) $hasStock = true;
     }
 
-    $cols = ['name', 'category', 'gender', 'description', 'created_at'];
-    $vals = ['?', '?', '?', '?', 'NOW()'];
-    $types = 'ssss';
-    $params = [$name, $category, $gender, $description];
+    $cols = ['name', 'main_category', 'subcategory', 'gender', 'description', 'created_at'];
+    $vals = ['?', '?', '?', '?', '?', 'NOW()'];
+    $types = 'sssss';
+    $params = [$name, $mainCategory, $subcategory, $gender, $description];
 
     if ($hasPrice) {
         $cols[] = 'price';
